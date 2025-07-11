@@ -6,9 +6,9 @@
 <div class="row justify-content-center">
     <div class="col-lg-10">
         <div class="card">
-            <div class="card-header bg-success text-white">
+            <div class="card-header">
                 <h4 class="mb-0">
-                    <i class="fas fa-download me-2"></i>Generated Files Ready for Download
+                    <i class="fas fa-check-circle me-2"></i>Files Generated Successfully
                 </h4>
             </div>
             <div class="card-body">
@@ -22,9 +22,14 @@
                 </div>
 
                 {% if project_outputs %}
-                <div class="row">
-                    <div class="col-md-8">
-                        <h6><i class="fas fa-folder me-2"></i>Generated Project Outputs ({{ project_count }})</h6>
+                <!-- Generated Project Outputs - Full Width -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-folder me-2"></i>Generated Project Outputs ({{ project_count }})
+                        </h6>
+                    </div>
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -55,8 +60,11 @@
                             </table>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4">
+                <!-- Download Options and Summary - Side by Side -->
+                <div class="row g-4">
+                    <div class="col-lg-6">
                         <div class="card">
                             <div class="card-header">
                                 <h6 class="mb-0">
@@ -82,9 +90,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Project Summary -->
-                        <div class="card mt-3">
+                    <!-- Project Summary -->
+                    <div class="col-lg-6">
+                        <div class="card">
                             <div class="card-header">
                                 <h6 class="mb-0">
                                     <i class="fas fa-info-circle me-2"></i>Summary
@@ -116,42 +126,51 @@
                     </div>
                 </div>
 
-                <!-- Instructions -->
+                <!-- Collapsible Instructions -->
                 <div class="card mt-4">
                     <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="fas fa-info-circle me-2"></i>Next Steps
-                        </h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Next Steps
+                            </h6>
+                            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#nextStepsCollapse" aria-expanded="false"
+                                aria-controls="nextStepsCollapse">
+                                <i class="fas fa-chevron-down me-1"></i>Show
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6><i class="fas fa-play-circle text-success me-2"></i>How to Use the Generated Files:
-                                </h6>
-                                <ol class="small">
-                                    <li>Download the ZIP package containing all projects</li>
-                                    <li>Extract the ZIP file to your desired location</li>
-                                    <li>Each project folder contains all original files plus the new <code>.tpf</code>
-                                        and
-                                        <code>TOXSWABAT.bat</code> files
-                                    </li>
-                                    <li>Run the <code>TOXSWABAT.bat</code> file in each project folder to execute TOXSWA
-                                        runs</li>
-                                    <li>Or run individual <code>.tpf</code> files manually</li>
-                                    <li>Check the generated output files in your SWAN project folders</li>
-                                </ol>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><i class="fas fa-exclamation-triangle text-warning me-2"></i>Important Notes:</h6>
-                                <ul class="small">
-                                    <li>Each project output is a complete copy of the original project plus new SWAN
-                                        files</li>
-                                    <li>Ensure TOXSWA is installed and accessible</li>
-                                    <li>Verify the output paths in the generated files</li>
-                                    <li>Check that all required input files are present</li>
-                                    <li>Monitor the TOXSWA execution for any errors</li>
-                                    <li>Backup your original files before running new simulations</li>
-                                </ul>
+                    <div class="collapse" id="nextStepsCollapse">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6><i class="fas fa-play-circle text-success me-2"></i>How to Use the Generated
+                                        Files:</h6>
+                                    <ol class="small">
+                                        <li>Download the ZIP package containing all projects</li>
+                                        <li>Extract the ZIP file to your desired location</li>
+                                        <li>Each project folder contains all original files plus the new
+                                            <code>.tpf</code> and <code>TOXSWABAT.bat</code> files
+                                        </li>
+                                        <li>Run the <code>TOXSWABAT.bat</code> file in each project folder to execute
+                                            TOXSWA runs</li>
+                                        <li>Or run individual <code>.tpf</code> files manually</li>
+                                        <li>Check the generated output files in your SWAN project folders</li>
+                                    </ol>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6><i class="fas fa-exclamation-triangle text-warning me-2"></i>Important Notes:
+                                    </h6>
+                                    <ul class="small">
+                                        <li>Each project output is a complete copy of the original project plus new SWAN
+                                            files</li>
+                                        <li>Ensure TOXSWA is installed and accessible</li>
+                                        <li>Verify the output paths in the generated files</li>
+                                        <li>Check that all required input files are present</li>
+                                        <li>Monitor the TOXSWA execution for any errors</li>
+                                        <li>Backup your original files before running new simulations</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -184,6 +203,18 @@
                 const filename = this.getAttribute('href').split('/').pop();
                 console.log('Downloading:', filename);
             });
+        });
+
+        // Update button text when Next Steps are toggled
+        const nextStepsButton = document.querySelector('[data-bs-toggle="collapse"]');
+        const nextStepsCollapse = document.getElementById('nextStepsCollapse');
+
+        nextStepsCollapse.addEventListener('show.bs.collapse', function () {
+            nextStepsButton.innerHTML = '<i class="fas fa-chevron-up me-1"></i>Hide';
+        });
+
+        nextStepsCollapse.addEventListener('hide.bs.collapse', function () {
+            nextStepsButton.innerHTML = '<i class="fas fa-chevron-down me-1"></i>Show';
         });
     });
 </script>

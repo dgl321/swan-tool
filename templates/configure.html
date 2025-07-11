@@ -117,35 +117,45 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row g-3 mt-2">
-                            <div class="col-md-6">
-                                <label for="runoff_volume_reduction" class="form-label">Volume Reduction</label>
-                                <div class="auto-populated">
-                                    <input type="number" class="form-control" id="runoff_volume_reduction"
-                                        name="runoff_volume_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
+
+                        <!-- Hidden runoff fields - still functional but not visible -->
+                        <div style="display: none;">
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6">
+                                    <label for="runoff_volume_reduction" class="form-label">Volume Reduction</label>
+                                    <div class="auto-populated">
+                                        <input type="number" class="form-control" id="runoff_volume_reduction"
+                                            name="runoff_volume_reduction" value="0.0" step="0.1" min="0" max="1"
+                                            readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="runoff_flux_reduction" class="form-label">Flux Reduction</label>
+                                    <div class="auto-populated">
+                                        <input type="number" class="form-control" id="runoff_flux_reduction"
+                                            name="runoff_flux_reduction" value="0.0" step="0.1" min="0" max="1"
+                                            readonly>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="runoff_flux_reduction" class="form-label">Flux Reduction</label>
-                                <div class="auto-populated">
-                                    <input type="number" class="form-control" id="runoff_flux_reduction"
-                                        name="runoff_flux_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6">
+                                    <label for="erosion_mass_reduction" class="form-label">Erosion Mass
+                                        Reduction</label>
+                                    <div class="auto-populated">
+                                        <input type="number" class="form-control" id="erosion_mass_reduction"
+                                            name="erosion_mass_reduction" value="0.0" step="0.1" min="0" max="1"
+                                            readonly>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row g-3 mt-2">
-                            <div class="col-md-6">
-                                <label for="erosion_mass_reduction" class="form-label">Erosion Mass Reduction</label>
-                                <div class="auto-populated">
-                                    <input type="number" class="form-control" id="erosion_mass_reduction"
-                                        name="erosion_mass_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="erosion_flux_reduction" class="form-label">Erosion Flux Reduction</label>
-                                <div class="auto-populated">
-                                    <input type="number" class="form-control" id="erosion_flux_reduction"
-                                        name="erosion_flux_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
+                                <div class="col-md-6">
+                                    <label for="erosion_flux_reduction" class="form-label">Erosion Flux
+                                        Reduction</label>
+                                    <div class="auto-populated">
+                                        <input type="number" class="form-control" id="erosion_flux_reduction"
+                                            name="erosion_flux_reduction" value="0.0" step="0.1" min="0" max="1"
+                                            readonly>
+                                    </div>
                                 </div>
                             </div>
                         </div>
