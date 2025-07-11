@@ -32,6 +32,33 @@
         border-radius: 3px;
         font-weight: 500;
     }
+
+    .parameter-combination {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .parameter-combination:hover {
+        background: #e9ecef;
+    }
+
+    .combination-preview {
+        font-family: monospace;
+        font-size: 0.875rem;
+        color: #495057;
+    }
+
+    .combination-count {
+        background: #007bff;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
 </style>
 
 <div class="row">
@@ -43,7 +70,7 @@
                 </h4>
             </div>
             <div class="card-body">
-                <form action="{{ url_for('generate_files') }}" method="post">
+                <form action="{{ url_for('generate_files') }}" method="post" id="parameterForm">
                     <!-- Project Information -->
                     <div class="mb-4">
                         <h5 class="fw-bold text-primary mb-3">
@@ -95,90 +122,144 @@
                         </div>
                     </div>
 
-                    <!-- Run-off Mitigation -->
+                    <!-- Multi-Parameter Selection -->
                     <div class="mb-4">
                         <h5 class="fw-bold text-primary mb-3">
-                            <i class="fas fa-water me-2"></i>Run-off Mitigation Parameters
+                            <i class="fas fa-layer-group me-2"></i>Multi-Parameter Selection
                         </h5>
                         <div class="alert alert-info mb-3">
-                            <h6 class="fw-bold mb-2">FOCUS-Compliant Mitigation Scenarios</h6>
-                            <p class="mb-0 small">Select a FOCUS-accepted fractional reduction scenario for runoff
-                                mitigation. The reduction values will be automatically populated based on your
-                                selection.</p>
+                            <h6 class="fw-bold mb-2">Generate Multiple Parameter Combinations</h6>
+                            <p class="mb-0 small">Select multiple values for each parameter to generate separate
+                                projects for each combination.
+                                For example, selecting 70% nozzle and both 10m and 20m runoff will create 2 projects:
+                                "EXAMPLE_70N_10L&M" and "EXAMPLE_70N_20L&M".</p>
                         </div>
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <label for="mitigation_scenario" class="form-label">FOCUS Mitigation Scenario</label>
-                                <select class="form-control" id="mitigation_scenario" name="mitigation_scenario"
-                                    required>
-                                    <option value="">Select a FOCUS scenario...</option>
-                                    <option value="10m">10m VFS Buffer (Volume: 0.6, Erosion: 0.85)</option>
-                                    <option value="20m">20m VFS Buffer (Volume: 0.8, Erosion: 0.95)</option>
-                                </select>
+
+                        <!-- Nozzle Reduction Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Nozzle Reduction (%)</label>
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input nozzle-checkbox" type="checkbox" id="nozzle_0"
+                                            value="0">
+                                        <label class="form-check-label" for="nozzle_0">0% (No reduction)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input nozzle-checkbox" type="checkbox" id="nozzle_50"
+                                            value="50">
+                                        <label class="form-check-label" for="nozzle_50">50%</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input nozzle-checkbox" type="checkbox" id="nozzle_70"
+                                            value="70">
+                                        <label class="form-check-label" for="nozzle_70">70%</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input nozzle-checkbox" type="checkbox" id="nozzle_90"
+                                            value="90">
+                                        <label class="form-check-label" for="nozzle_90">90%</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Hidden runoff fields - still functional but not visible -->
-                        <div style="display: none;">
-                            <div class="row g-3 mt-2">
+                        <!-- Runoff Mitigation Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Runoff Mitigation Scenarios</label>
+                            <div class="row g-2">
                                 <div class="col-md-6">
-                                    <label for="runoff_volume_reduction" class="form-label">Volume Reduction</label>
-                                    <div class="auto-populated">
-                                        <input type="number" class="form-control" id="runoff_volume_reduction"
-                                            name="runoff_volume_reduction" value="0.0" step="0.1" min="0" max="1"
-                                            readonly>
+                                    <div class="form-check">
+                                        <input class="form-check-input runoff-checkbox" type="checkbox" id="runoff_10m"
+                                            value="10m">
+                                        <label class="form-check-label" for="runoff_10m">
+                                            10m VFS Buffer (Volume: 0.6, Erosion: 0.85)
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="runoff_flux_reduction" class="form-label">Flux Reduction</label>
-                                    <div class="auto-populated">
-                                        <input type="number" class="form-control" id="runoff_flux_reduction"
-                                            name="runoff_flux_reduction" value="0.0" step="0.1" min="0" max="1"
-                                            readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-3 mt-2">
-                                <div class="col-md-6">
-                                    <label for="erosion_mass_reduction" class="form-label">Erosion Mass
-                                        Reduction</label>
-                                    <div class="auto-populated">
-                                        <input type="number" class="form-control" id="erosion_mass_reduction"
-                                            name="erosion_mass_reduction" value="0.0" step="0.1" min="0" max="1"
-                                            readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="erosion_flux_reduction" class="form-label">Erosion Flux
-                                        Reduction</label>
-                                    <div class="auto-populated">
-                                        <input type="number" class="form-control" id="erosion_flux_reduction"
-                                            name="erosion_flux_reduction" value="0.0" step="0.1" min="0" max="1"
-                                            readonly>
+                                    <div class="form-check">
+                                        <input class="form-check-input runoff-checkbox" type="checkbox" id="runoff_20m"
+                                            value="20m">
+                                        <label class="form-check-label" for="runoff_20m">
+                                            20m VFS Buffer (Volume: 0.8, Erosion: 0.95)
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Buffer Width Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Buffer Width (m)</label>
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_0"
+                                            value="0">
+                                        <label class="form-check-label" for="buffer_0">0m (No buffer)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_5"
+                                            value="5">
+                                        <label class="form-check-label" for="buffer_5">5m</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_10"
+                                            value="10">
+                                        <label class="form-check-label" for="buffer_10">10m</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_20"
+                                            value="20">
+                                        <label class="form-check-label" for="buffer_20">20m</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Parameter Combinations Preview -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-secondary mb-3">
+                                <i class="fas fa-eye me-2"></i>Parameter Combinations Preview
+                                <span class="combination-count ms-2" id="combinationCount">0</span>
+                            </h6>
+                            <div id="combinationsPreview" class="border rounded p-3 bg-light">
+                                <p class="text-muted mb-0">Select parameters above to see the combinations that will be
+                                    generated...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Legacy Single Parameter Fields (Hidden) -->
+                    <div style="display: none;">
+                        <input type="hidden" id="nozzle_reduction" name="nozzle_reduction" value="0">
+                        <input type="hidden" id="mitigation_scenario" name="mitigation_scenario" value="">
+                        <input type="hidden" id="buffer_width" name="buffer_width" value="0">
+                        <input type="hidden" id="runoff_volume_reduction" name="runoff_volume_reduction" value="0.0">
+                        <input type="hidden" id="runoff_flux_reduction" name="runoff_flux_reduction" value="0.0">
+                        <input type="hidden" id="erosion_mass_reduction" name="erosion_mass_reduction" value="0.0">
+                        <input type="hidden" id="erosion_flux_reduction" name="erosion_flux_reduction" value="0.0">
                     </div>
 
                     <!-- Spray Drift Mitigation -->
                     <div class="mb-4">
                         <h5 class="fw-bold text-primary mb-3">
-                            <i class="fas fa-wind me-2"></i>Spray Drift Mitigation
+                            <i class="fas fa-wind me-2"></i>Additional Options
                         </h5>
                         <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="nozzle_reduction" class="form-label">Nozzle Reduction (%)</label>
-                                <input type="number" class="form-control" id="nozzle_reduction" name="nozzle_reduction"
-                                    value="0" min="0" max="100">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="buffer_width" class="form-label">Buffer Width (m)</label>
-                                <input type="number" class="form-control" id="buffer_width" name="buffer_width"
-                                    value="0" min="0" max="100">
-                            </div>
-                        </div>
-                        <div class="row g-3 mt-2">
                             <div class="col-md-6">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="use_step3_mass_loadings"
@@ -196,28 +277,6 @@
                                         Select Buffer Width
                                     </label>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Output Naming Preview -->
-                    <div class="mb-4">
-                        <h5 class="fw-bold text-primary mb-3">
-                            <i class="fas fa-eye me-2"></i>Output Naming Preview
-                        </h5>
-                        <div class="alert alert-info">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <strong>Output Directory:</strong><br>
-                                    <code id="output-preview" class="fs-6">PROJECT_NAME</code>
-                                </div>
-                                <div class="col-md-6">
-                                    <strong>TPF File:</strong><br>
-                                    <code id="tpf-preview" class="fs-6">PROJECT_NAME.tpf</code>
-                                </div>
-                            </div>
-                            <div class="mt-2 small">
-                                <em>Naming convention: PROJECT_NAME_PARAMETERS (e.g., LLGL625_90N_20B_10L&M)</em>
                             </div>
                         </div>
                     </div>
@@ -310,125 +369,174 @@
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        console.log('DOM loaded, setting up mitigation scenario handler...');
+        console.log('DOM loaded, setting up multi-parameter selection...');
 
-        // Add form validation
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function (e) {
-            const requiredFields = form.querySelectorAll('[required]');
-            let isValid = true;
+        // Get all checkbox groups
+        const nozzleCheckboxes = document.querySelectorAll('.nozzle-checkbox');
+        const runoffCheckboxes = document.querySelectorAll('.runoff-checkbox');
+        const bufferCheckboxes = document.querySelectorAll('.buffer-checkbox');
 
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    field.classList.remove('is-invalid');
+        // Hidden form fields for legacy compatibility
+        const nozzleReductionField = document.getElementById('nozzle_reduction');
+        const mitigationScenarioField = document.getElementById('mitigation_scenario');
+        const bufferWidthField = document.getElementById('buffer_width');
+
+        // Preview elements
+        const combinationsPreview = document.getElementById('combinationsPreview');
+        const combinationCount = document.getElementById('combinationCount');
+
+        // Function to generate all parameter combinations
+        function generateCombinations() {
+            const selectedNozzles = Array.from(nozzleCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => parseInt(cb.value));
+
+            const selectedRunoffs = Array.from(runoffCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            const selectedBuffers = Array.from(bufferCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => parseInt(cb.value));
+
+            // If no parameters selected, show default message
+            if (selectedNozzles.length === 0 && selectedRunoffs.length === 0 && selectedBuffers.length === 0) {
+                combinationsPreview.innerHTML = '<p class="text-muted mb-0">Select parameters above to see the combinations that will be generated...</p>';
+                combinationCount.textContent = '0';
+                return [];
+            }
+
+            // Generate all combinations
+            const combinations = [];
+            const nozzleValues = selectedNozzles.length > 0 ? selectedNozzles : [0];
+            const runoffValues = selectedRunoffs.length > 0 ? selectedRunoffs : [''];
+            const bufferValues = selectedBuffers.length > 0 ? selectedBuffers : [0];
+
+            for (const nozzle of nozzleValues) {
+                for (const runoff of runoffValues) {
+                    for (const buffer of bufferValues) {
+                        const combination = {
+                            nozzle: nozzle,
+                            runoff: runoff,
+                            buffer: buffer,
+                            params: []
+                        };
+
+                        // Build parameter string
+                        if (nozzle > 0) combination.params.push(`${nozzle}N`);
+                        if (buffer > 0) combination.params.push(`${buffer}B`);
+                        if (runoff === '10m') combination.params.push('10L&M');
+                        if (runoff === '20m') combination.params.push('20L&M');
+
+                        combinations.push(combination);
+                    }
                 }
+            }
+
+            // Update preview
+            updateCombinationsPreview(combinations);
+            return combinations;
+        }
+
+        // Function to update the combinations preview
+        function updateCombinationsPreview(combinations) {
+            if (combinations.length === 0) {
+                combinationsPreview.innerHTML = '<p class="text-muted mb-0">Select parameters above to see the combinations that will be generated...</p>';
+                combinationCount.textContent = '0';
+                return;
+            }
+
+            const projectName = '{{ projects[0].project_name if projects else "PROJECT_NAME" }}';
+            let previewHTML = '';
+
+            combinations.forEach((combo, index) => {
+                const paramString = combo.params.length > 0 ? '_' + combo.params.join('_') : '';
+                const outputName = projectName + paramString;
+
+                previewHTML += `
+                    <div class="parameter-combination">
+                        <div class="combination-preview">
+                            <strong>${outputName}</strong>
+                        </div>
+                        <div class="small text-muted mt-1">
+                            Nozzle: ${combo.nozzle}% | 
+                            ${combo.runoff ? `Runoff: ${combo.runoff}` : 'No runoff'} | 
+                            Buffer: ${combo.buffer}m
+                        </div>
+                    </div>
+                `;
             });
 
-            if (!isValid) {
+            combinationsPreview.innerHTML = previewHTML;
+            combinationCount.textContent = combinations.length;
+        }
+
+        // Add event listeners to all checkboxes
+        function addCheckboxListeners() {
+            const allCheckboxes = [...nozzleCheckboxes, ...runoffCheckboxes, ...bufferCheckboxes];
+
+            allCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    generateCombinations();
+                });
+            });
+        }
+
+        // Function to prepare form data for submission
+        function prepareFormData() {
+            const combinations = generateCombinations();
+
+            // Create hidden fields for each combination
+            combinations.forEach((combo, index) => {
+                // Create hidden inputs for this combination
+                const nozzleInput = document.createElement('input');
+                nozzleInput.type = 'hidden';
+                nozzleInput.name = `combinations[${index}][nozzle]`;
+                nozzleInput.value = combo.nozzle;
+
+                const runoffInput = document.createElement('input');
+                runoffInput.type = 'hidden';
+                runoffInput.name = `combinations[${index}][runoff]`;
+                runoffInput.value = combo.runoff;
+
+                const bufferInput = document.createElement('input');
+                bufferInput.type = 'hidden';
+                bufferInput.name = `combinations[${index}][buffer]`;
+                bufferInput.value = combo.buffer;
+
+                // Add to form
+                document.getElementById('parameterForm').appendChild(nozzleInput);
+                document.getElementById('parameterForm').appendChild(runoffInput);
+                document.getElementById('parameterForm').appendChild(bufferInput);
+            });
+
+            // Add total combinations count
+            const countInput = document.createElement('input');
+            countInput.type = 'hidden';
+            countInput.name = 'total_combinations';
+            countInput.value = combinations.length;
+            document.getElementById('parameterForm').appendChild(countInput);
+        }
+
+        // Add form submission handler
+        document.getElementById('parameterForm').addEventListener('submit', function (e) {
+            const combinations = generateCombinations();
+
+            if (combinations.length === 0) {
                 e.preventDefault();
-                alert('Please fill in all required fields.');
+                alert('Please select at least one parameter combination.');
+                return;
             }
+
+            // Prepare form data
+            prepareFormData();
         });
 
-        // Auto-update fractional reduction values based on selected scenario
-        const mitigationScenario = document.getElementById('mitigation_scenario');
-        const runoffVolumeReduction = document.getElementById('runoff_volume_reduction');
-        const runoffFluxReduction = document.getElementById('runoff_flux_reduction');
-        const erosionMassReduction = document.getElementById('erosion_mass_reduction');
-        const erosionFluxReduction = document.getElementById('erosion_flux_reduction');
+        // Initialize
+        addCheckboxListeners();
+        generateCombinations();
 
-        console.log('Found elements:', {
-            mitigationScenario: mitigationScenario,
-            runoffVolumeReduction: runoffVolumeReduction,
-            runoffFluxReduction: runoffFluxReduction,
-            erosionMassReduction: erosionMassReduction,
-            erosionFluxReduction: erosionFluxReduction
-        });
-
-        function updateReductionValues() {
-            const scenario = mitigationScenario.value;
-            console.log('Updating reduction values for scenario:', scenario);
-
-            if (scenario === '10m') {
-                // 10m VFS Buffer: Volume 0.6, Erosion 0.85
-                runoffVolumeReduction.value = '0.6';
-                runoffFluxReduction.value = '0.6';
-                erosionMassReduction.value = '0.85';
-                erosionFluxReduction.value = '0.85';
-                console.log('Set 10m values: 0.6, 0.6, 0.85, 0.85');
-            } else if (scenario === '20m') {
-                // 20m VFS Buffer: Volume 0.8, Erosion 0.95
-                runoffVolumeReduction.value = '0.8';
-                runoffFluxReduction.value = '0.8';
-                erosionMassReduction.value = '0.95';
-                erosionFluxReduction.value = '0.95';
-                console.log('Set 20m values: 0.8, 0.8, 0.95, 0.95');
-            } else {
-                // Reset to 0 if no scenario selected
-                runoffVolumeReduction.value = '0.0';
-                runoffFluxReduction.value = '0.0';
-                erosionMassReduction.value = '0.0';
-                erosionFluxReduction.value = '0.0';
-                console.log('Reset values to 0.0');
-            }
-        }
-
-        // Run immediately on page load
-        updateReductionValues();
-
-        // Also run on change events
-        mitigationScenario.addEventListener('change', updateReductionValues);
-
-        console.log('Mitigation scenario handler setup complete');
-
-        // Update output naming preview
-        function updateOutputPreview() {
-            const projectName = '{{ projects[0].project_name if projects else "PROJECT_NAME" }}';
-            const mitigationScenario = document.getElementById('mitigation_scenario').value;
-            const nozzleReduction = document.getElementById('nozzle_reduction').value;
-            const bufferWidth = document.getElementById('buffer_width').value;
-
-            let paramString = '';
-            const params = [];
-
-            // Add nozzle reduction
-            if (nozzleReduction > 0) {
-                params.push(`${nozzleReduction}N`);
-            }
-
-            // Add buffer width
-            if (bufferWidth > 0) {
-                params.push(`${bufferWidth}B`);
-            }
-
-            // Add mitigation scenario
-            if (mitigationScenario === '10m') {
-                params.push('10L&M');
-            } else if (mitigationScenario === '20m') {
-                params.push('20L&M');
-            }
-
-            if (params.length > 0) {
-                paramString = '_' + params.join('_');
-            }
-
-            const outputName = projectName + paramString;
-            const tpfName = outputName + '.tpf';
-
-            document.getElementById('output-preview').textContent = outputName;
-            document.getElementById('tpf-preview').textContent = tpfName;
-        }
-
-        // Update preview on any parameter change
-        document.getElementById('mitigation_scenario').addEventListener('change', updateOutputPreview);
-        document.getElementById('nozzle_reduction').addEventListener('input', updateOutputPreview);
-        document.getElementById('buffer_width').addEventListener('input', updateOutputPreview);
-
-        // Initial preview update
-        updateOutputPreview();
+        console.log('Multi-parameter selection setup complete');
     });
 </script>
 {% endblock %}

@@ -265,6 +265,108 @@ def generate_files():
     # Get form data
     form_data = request.form.to_dict()
     
+    # Check if we're using multi-parameter combinations
+    total_combinations = int(form_data.get('total_combinations', 0))
+    
+    if total_combinations > 0:
+        # Multi-parameter mode - process each combination
+        return generate_multiple_combinations(projects, form_data)
+    else:
+        # Legacy single-parameter mode
+        return generate_single_combination(projects, form_data)
+
+def generate_multiple_combinations(projects, form_data):
+    """Generate files for multiple parameter combinations."""
+    # Extract combinations from form data
+    combinations = []
+    index = 0
+    
+    while f'combinations[{index}][nozzle]' in form_data:
+        combination = {
+            'nozzle': int(form_data[f'combinations[{index}][nozzle]']),
+            'runoff': form_data[f'combinations[{index}][runoff]'],
+            'buffer': int(form_data[f'combinations[{index}][buffer]'])
+        }
+        combinations.append(combination)
+        index += 1
+    
+    if not combinations:
+        flash('No parameter combinations found. Please select at least one combination.', 'error')
+        return redirect(url_for('configure'))
+    
+    # Load template
+    template_path = form_data.get('template_path', 'BIXSC45_1AP_10mS_10m_VFS.tpf')
+    if not os.path.exists(template_path):
+        template_path = os.path.join('test_data', 'BIXSC45_1AP_10mS_10m_VFS', 'BIXSC45_1AP_10mS_10m_VFS.tpf')
+        
+    tpf_generator.load_template(template_path)
+    
+    generated_files = []
+    project_outputs = []
+    
+    try:
+        # Generate files for each project and each combination
+        for project in projects:
+            project_path = project['project_path']
+            project_name = project['project_name']
+            
+            for combination in combinations:
+                # Create parameter string for this combination
+                param_string = generate_parameter_string_from_combination(combination)
+                
+                # Create output directory with parameter-based naming
+                output_dir_name = f"{project_name}{param_string}"
+                project_output_dir = os.path.join(os.path.dirname(project_path), output_dir_name)
+                os.makedirs(project_output_dir, exist_ok=True)
+                
+                # Copy all files from the original project to the output directory
+                print(f"Copying project files from {project_path} to {project_output_dir}")
+                if not copy_project_files(project_path, project_output_dir):
+                    flash(f'Warning: Could not copy all files from {project_name}', 'warning')
+                
+                # Prepare parameters for TPF generation
+                parameters = prepare_tpf_parameters_for_combination(project, form_data, combination)
+                
+                # Generate TPF file with parameter-based naming
+                tpf_filename = f"{project_name}{param_string}.tpf"
+                tpf_path = os.path.join(project_output_dir, tpf_filename)
+                
+                generated_tpf = tpf_generator.generate_tpf(parameters, tpf_path)
+                generated_files.append(generated_tpf)
+                
+                # Generate .bat file for this project
+                bat_path = os.path.join(project_output_dir, "TOXSWABAT.bat")
+                generated_bat = bat_generator.generate_bat_from_project_data([project], project_output_dir)
+                generated_files.append(generated_bat)
+                
+                # Store project output info
+                project_outputs.append({
+                    'project_name': project_name,
+                    'output_dir': project_output_dir,
+                    'tpf_file': generated_tpf,
+                    'bat_file': generated_bat,
+                    'param_string': param_string,
+                    'combination': combination
+                })
+        
+        # Create a combined zip archive with all projects
+        combined_zip_path = zip_util.create_combined_project_zip(project_outputs)
+        generated_files.append(combined_zip_path)
+        
+        # Store generated files and project outputs in session
+        session['generated_files'] = generated_files
+        session['project_outputs'] = project_outputs
+        session['combined_zip_path'] = combined_zip_path
+        
+        flash(f'Files generated successfully for {len(projects)} projects with {len(combinations)} parameter combinations!', 'success')
+        return redirect(url_for('download'))
+        
+    except Exception as e:
+        flash(f'Error generating files: {str(e)}', 'error')
+        return redirect(url_for('configure'))
+
+def generate_single_combination(projects, form_data):
+    """Generate files for a single parameter combination (legacy mode)."""
     # Generate parameter string for naming
     param_string = generate_parameter_string(form_data)
     
@@ -334,6 +436,96 @@ def generate_files():
     except Exception as e:
         flash(f'Error generating files: {str(e)}', 'error')
         return redirect(url_for('configure'))
+
+def generate_parameter_string_from_combination(combination):
+    """Generate parameter string from a combination dictionary."""
+    parameters = []
+    
+    # Nozzle reduction (N)
+    nozzle_reduction = combination.get('nozzle', 0)
+    if nozzle_reduction > 0:
+        parameters.append(f"{nozzle_reduction}N")
+    
+    # Buffer width (B)
+    buffer_width = combination.get('buffer', 0)
+    if buffer_width > 0:
+        parameters.append(f"{buffer_width}B")
+    
+    # Runoff mitigation scenario
+    runoff_scenario = combination.get('runoff', '')
+    if runoff_scenario == '10m':
+        parameters.append("10L&M")
+    elif runoff_scenario == '20m':
+        parameters.append("20L&M")
+    
+    # Join parameters with underscores
+    if parameters:
+        return "_" + "_".join(parameters)
+    else:
+        return ""
+
+def prepare_tpf_parameters_for_combination(project, form_data, combination):
+    """Prepare parameters for TPF generation from a specific combination."""
+    # Get scenarios and automatically set mitigation count
+    scenarios = project.get('scenarios', [])
+    mitigation_count = len(scenarios) if scenarios else 1
+    
+    # Get vapour pressure from project data (extracted from TXW) or form data
+    extracted_vp = project.get('vapour_pressure')
+    if extracted_vp is not None:
+        vapour_pressure = float(extracted_vp)
+        print(f"Using extracted vapour pressure: {vapour_pressure} Pa")
+    else:
+        vapour_pressure = float(form_data.get('vapour_pressure', 0.000000046))
+        print(f"Using form vapour pressure: {vapour_pressure}")
+    
+    # Handle mitigation scenario selection from combination
+    runoff_scenario = combination.get('runoff', '')
+    if runoff_scenario == '10m':
+        # 10m VFS Buffer: Volume 0.6, Erosion 0.85
+        runoff_volume_reduction = 0.6
+        runoff_flux_reduction = 0.6
+        erosion_mass_reduction = 0.85
+        erosion_flux_reduction = 0.85
+    elif runoff_scenario == '20m':
+        # 20m VFS Buffer: Volume 0.8, Erosion 0.95
+        runoff_volume_reduction = 0.8
+        runoff_flux_reduction = 0.8
+        erosion_mass_reduction = 0.95
+        erosion_flux_reduction = 0.95
+    else:
+        # No runoff mitigation
+        runoff_volume_reduction = 0.0
+        runoff_flux_reduction = 0.0
+        erosion_mass_reduction = 0.0
+        erosion_flux_reduction = 0.0
+    
+    # Generate parameter string for filename
+    param_string = generate_parameter_string_from_combination(combination)
+    
+    parameters = {
+        'crop': project.get('crop', 'Unknown'),
+        'substance_name': project.get('substance_name', 'Unknown'),
+        'num_applications': int(form_data.get('num_applications', 1)),
+        'source_project_name': project.get('project_name', 'Unknown'),
+        'source_project_path': project.get('project_path', 'Unknown'),
+        'output_project_path': form_data.get('output_project_path', 'C:\\SwashProjects\\Output'),
+        'parameter_filename': f"{project['project_name']}{param_string}.tpf",
+        'filename': f"{project['project_name']}{param_string}.tpf",
+        'vapour_pressure': vapour_pressure,  # Use extracted or form value
+        'mitigation_count': mitigation_count,  # Automatically set based on scenarios
+        'runoff_volume_reduction': runoff_volume_reduction,
+        'runoff_flux_reduction': runoff_flux_reduction,
+        'erosion_mass_reduction': erosion_mass_reduction,
+        'erosion_flux_reduction': erosion_flux_reduction,
+        'nozzle_reduction': combination.get('nozzle', 0),
+        'use_step3_mass_loadings': form_data.get('use_step3_mass_loadings') == 'on',
+        'select_buffer_width': form_data.get('select_buffer_width') == 'on',
+        'buffer_width': combination.get('buffer', 0),
+        'scenarios': scenarios
+    }
+    
+    return parameters
 
 def prepare_tpf_parameters(project: dict, form_data: dict) -> dict:
     """Prepare parameters for TPF generation."""

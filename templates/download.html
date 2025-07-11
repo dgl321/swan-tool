@@ -37,6 +37,7 @@
                                         <th>Project Name</th>
                                         <th>Output Directory</th>
                                         <th>Files Generated</th>
+                                        <th>Parameters</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -53,6 +54,30 @@
                                             <span class="badge bg-primary me-1">TPF</span>
                                             <span class="badge bg-success me-1">BAT</span>
                                             <span class="badge bg-info me-1">Original Files</span>
+                                        </td>
+                                        <td>
+                                            {% if project.combination %}
+                                            <div class="small">
+                                                {% if project.combination.nozzle > 0 %}
+                                                <span class="badge bg-warning me-1">{{ project.combination.nozzle }}%
+                                                    Nozzle</span>
+                                                {% endif %}
+                                                {% if project.combination.runoff %}
+                                                <span class="badge bg-info me-1">{{ project.combination.runoff }}
+                                                    Runoff</span>
+                                                {% endif %}
+                                                {% if project.combination.buffer > 0 %}
+                                                <span class="badge bg-secondary me-1">{{ project.combination.buffer }}m
+                                                    Buffer</span>
+                                                {% endif %}
+                                                {% if not project.combination.nozzle and not project.combination.runoff
+                                                and not project.combination.buffer %}
+                                                <span class="text-muted">No parameters</span>
+                                                {% endif %}
+                                            </div>
+                                            {% else %}
+                                            <span class="text-muted small">Single combination</span>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
