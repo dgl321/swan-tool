@@ -4,71 +4,122 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
+    <div class="col-lg-10">
+        <!-- Header Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold text-primary mb-3">
+                <i class="fas fa-tools me-3"></i>SWAN Parameter Generator
+            </h1>
+            <p class="lead text-secondary">
+                Convert TOXSWA Step 3 projects to SWAN Step 4 parameter files
+            </p>
+        </div>
+
+        <!-- Main Form Card -->
+        <div class="card mb-4">
+            <div class="card-header">
                 <h4 class="mb-0">
                     <i class="fas fa-folder-open me-2"></i>Process TOXSWA Step 3 Projects
                 </h4>
             </div>
             <div class="card-body">
-                <div class="alert alert-info">
-                    <h6><i class="fas fa-info-circle me-2"></i>Instructions</h6>
-                    <ul class="mb-0">
-                        <li>Enter the full paths to your TOXSWA Step 3 project folders</li>
-                        <li>Each folder should contain a <code>TOXSWA</code> subfolder with <code>.txw</code> files</li>
-                        <li>The project folder should also contain <code>_report.txt</code> files</li>
-                        <li>Enter one path per line in the text area below</li>
-                        <li><strong>Example:</strong> <code>test_data/BIXSC45_1AP</code> (for testing)</li>
-                    </ul>
+                <!-- Instructions -->
+                <div class="alert alert-info mb-4">
+                    <h6 class="fw-bold mb-3">
+                        <i class="fas fa-info-circle me-2"></i>Instructions
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="mb-0">
+                                <li>Enter the full paths to your TOXSWA Step 3 project folders</li>
+                                <li>Each folder should contain a <code>TOXSWA</code> subfolder with <code>.txw</code>
+                                    files</li>
+                                <li>The project folder should also contain <code>_report.txt</code> files</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="mb-0">
+                                <li>Enter one path per line in the text area below</li>
+                                <li><strong>Example:</strong> <code>test_data/BIXSC45_1AP</code> (for testing)</li>
+                                <li>Use the "Test Paths" button to validate your inputs</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Form -->
                 <form action="{{ url_for('process_paths') }}" method="post">
                     <div class="mb-4">
-                        <label for="project_paths" class="form-label">
-                            <i class="fas fa-folder-open me-2"></i>Enter Project Paths
+                        <label for="project_paths" class="form-label fw-bold">
+                            <i class="fas fa-folder-open me-2"></i>Project Paths
                         </label>
-                        <textarea class="form-control" id="project_paths" name="project_paths" rows="4" placeholder="Enter one project path per line, e.g.:
+                        <textarea class="form-control" id="project_paths" name="project_paths" rows="6" placeholder="Enter one project path per line, e.g.:
 test_data/BIXSC45_1AP
 C:\SwashProjects\BIXSC45_1AP
-/path/to/project/folder" required></textarea>
+/path/to/project/folder" required
+                            style="font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 0.9rem;"></textarea>
                         <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
                             Enter the full paths to your TOXSWA Step 3 project folders, one per line
                         </div>
                     </div>
 
-                    <div class="d-grid gap-2">
+                    <div class="d-grid gap-3">
                         <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-search me-2"></i>Process Projects from Paths
+                            <i class="fas fa-search me-2"></i>Process Projects
                         </button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="testPaths()">
+                        <button type="button" class="btn btn-outline-secondary hidden-element" onclick="testPaths()">
                             <i class="fas fa-vial me-2"></i>Test Paths
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
 
-                <hr class="my-4">
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6><i class="fas fa-check-circle text-success me-2"></i>What the tool does:</h6>
-                        <ul class="small">
-                            <li>Reads project paths and processes TOXSWA folders</li>
-                            <li>Extracts metadata from <code>.txw</code> files</li>
-                            <li>Parses PEC values from <code>_report.txt</code> files</li>
-                            <li>Generates SWAN <code>.tpf</code> parameter files</li>
-                            <li>Creates <code>TOXSWABAT.bat</code> for batch processing</li>
-                            <li>Packages everything into a downloadable ZIP archive</li>
+        <!-- Features Grid -->
+        <div class="row g-4 mb-4 hidden-element">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-check-circle text-success" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h5 class="card-title">What the tool does</h5>
+                        <ul class="list-unstyled text-start">
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Reads project paths and processes
+                                TOXSWA folders</li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Extracts metadata from
+                                <code>.txw</code> files</li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Parses PEC values from
+                                <code>_report.txt</code> files</li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Generates SWAN <code>.tpf</code>
+                                parameter files</li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Creates <code>TOXSWABAT.bat</code>
+                                for batch processing</li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Packages everything into a
+                                downloadable ZIP archive</li>
                         </ul>
                     </div>
-                    <div class="col-md-6">
-                        <h6><i class="fas fa-exclamation-triangle text-warning me-2"></i>Requirements:</h6>
-                        <ul class="small">
-                            <li>Valid file system paths to TOXSWA projects</li>
-                            <li>TOXSWA Step 3 project structure</li>
-                            <li><code>TOXSWA/</code> subfolder with <code>.txw</code> files</li>
-                            <li><code>_report.txt</code> files in project root</li>
-                            <li>Valid substance and crop information</li>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-exclamation-triangle text-warning" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h5 class="card-title">Requirements</h5>
+                        <ul class="list-unstyled text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Valid file system paths to TOXSWA projects
+                            </li>
+                            <li><i class="fas fa-check text-success me-2"></i>TOXSWA Step 3 project structure</li>
+                            <li><i class="fas fa-check text-success me-2"></i><code>TOXSWA/</code> subfolder with
+                                <code>.txw</code> files</li>
+                            <li><i class="fas fa-check text-success me-2"></i><code>_report.txt</code> files in project
+                                root</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Valid substance and crop information</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Proper file permissions for
+                                reading/writing</li>
                         </ul>
                     </div>
                 </div>
@@ -76,24 +127,46 @@ C:\SwashProjects\BIXSC45_1AP
         </div>
 
         <!-- Example Structure -->
-        <div class="card mt-4">
+        <div class="card hidden-element">
             <div class="card-header">
                 <h6 class="mb-0">
                     <i class="fas fa-folder-tree me-2"></i>Example Project Structure
                 </h6>
             </div>
             <div class="card-body">
-                <pre class="bg-light p-3 rounded"><code>Project_Folder/
+                <div class="row">
+                    <div class="col-md-8">
+                        <pre class="bg-light p-3 rounded" style="font-size: 0.85rem;"><code>Project_Folder/
 ├── TOXSWA/
 │   ├── 4630.txw
 │   ├── 4631.txw
+│   ├── 4632.txw
 │   └── ...
 ├── ProjectName_report.txt
+├── ProjectName_metadata.txt
 └── other_files...</code></pre>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alert alert-info">
+                            <h6 class="fw-bold">File Types</h6>
+                            <ul class="small mb-0">
+                                <li><code>.txw</code> - TOXSWA scenario files</li>
+                                <li><code>_report.txt</code> - PEC calculation reports</li>
+                                <li><code>_metadata.txt</code> - Project metadata (optional)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .hidden-element {
+        display: none !important;
+    }
+</style>
 {% endblock %}
 
 {% block scripts %}
@@ -107,7 +180,7 @@ C:\SwashProjects\BIXSC45_1AP
             if (lines > 0) {
                 submitBtn.innerHTML = `<i class="fas fa-search me-2"></i>Process ${lines} Project Path(s)`;
             } else {
-                submitBtn.innerHTML = `<i class="fas fa-search me-2"></i>Process Projects from Paths`;
+                submitBtn.innerHTML = `<i class="fas fa-search me-2"></i>Process Projects`;
             }
         });
     });

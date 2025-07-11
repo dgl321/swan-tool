@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-lg-8">
         <div class="card">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header">
                 <h4 class="mb-0">
                     <i class="fas fa-cogs me-2"></i>Configure SWAN Parameters
                 </h4>
@@ -15,8 +15,10 @@
                 <form action="{{ url_for('generate_files') }}" method="post">
                     <!-- Project Information -->
                     <div class="mb-4">
-                        <h6><i class="fas fa-info-circle me-2"></i>Project Information</h6>
-                        <div class="row">
+                        <h5 class="fw-bold text-primary mb-3">
+                            <i class="fas fa-info-circle me-2"></i>Project Information
+                        </h5>
+                        <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="num_applications" class="form-label">Number of Applications</label>
                                 <input type="number" class="form-control" id="num_applications" name="num_applications"
@@ -32,27 +34,28 @@
 
                     <!-- Substance Properties -->
                     <div class="mb-4">
-                        <h6><i class="fas fa-flask me-2"></i>Substance Properties</h6>
-                        <div class="row">
+                        <h5 class="fw-bold text-primary mb-3">
+                            <i class="fas fa-flask me-2"></i>Substance Properties
+                        </h5>
+                        <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="vapour_pressure" class="form-label">Vapour Pressure (Pa)</label>
                                 <input type="number" class="form-control" id="vapour_pressure" name="vapour_pressure"
                                     value="{{ '%.2e'|format(projects[0].vapour_pressure) if projects and projects[0].vapour_pressure else '4.60e-08' }}"
                                     step="0.000000001" required>
                                 {% if projects and projects[0].vapour_pressure %}
-                                <div class="form-text text-muted">
+                                <div class="form-text">
                                     <i class="fas fa-info-circle me-1"></i>
                                     Extracted from TXW files ({{ '%.2e'|format(projects[0].vapour_pressure) }} Pa)
                                 </div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label for="mitigation_count" class="form-label">Mitigation Count
-                                    (Auto-calculated)</label>
+                                <label for="mitigation_count" class="form-label">Mitigation Count</label>
                                 <input type="number" class="form-control" id="mitigation_count" name="mitigation_count"
                                     value="{{ projects[0].scenarios|length if projects else 1 }}" min="1" max="20"
                                     readonly>
-                                <div class="form-text text-muted">
+                                <div class="form-text">
                                     <i class="fas fa-info-circle me-1"></i>
                                     Automatically set to match the number of scenarios ({{ projects[0].scenarios|length
                                     if projects else 1 }})
@@ -63,8 +66,16 @@
 
                     <!-- Run-off Mitigation -->
                     <div class="mb-4">
-                        <h6><i class="fas fa-water me-2"></i>Run-off Mitigation Parameters</h6>
-                        <div class="row">
+                        <h5 class="fw-bold text-primary mb-3">
+                            <i class="fas fa-water me-2"></i>Run-off Mitigation Parameters
+                        </h5>
+                        <div class="alert alert-info mb-3">
+                            <h6 class="fw-bold mb-2">FOCUS-Compliant Mitigation Scenarios</h6>
+                            <p class="mb-0 small">Select a FOCUS-accepted fractional reduction scenario for runoff
+                                mitigation. The reduction values will be automatically populated based on your
+                                selection.</p>
+                        </div>
+                        <div class="row g-3">
                             <div class="col-md-12">
                                 <label for="mitigation_scenario" class="form-label">FOCUS Mitigation Scenario</label>
                                 <select class="form-control" id="mitigation_scenario" name="mitigation_scenario"
@@ -73,35 +84,28 @@
                                     <option value="10m">10m VFS Buffer (Volume: 0.6, Erosion: 0.85)</option>
                                     <option value="20m">20m VFS Buffer (Volume: 0.8, Erosion: 0.95)</option>
                                 </select>
-                                <div class="form-text text-muted">
-                                    <i class="fas fa-info-circle me-1"></i>
-                                    FOCUS-accepted fractional reduction scenarios for runoff mitigation
-                                </div>
                             </div>
                         </div>
-                        <div class="row mt-3">
+                        <div class="row g-3 mt-2">
                             <div class="col-md-6">
-                                <label for="runoff_volume_reduction" class="form-label">Volume Reduction
-                                    (Auto-set)</label>
+                                <label for="runoff_volume_reduction" class="form-label">Volume Reduction</label>
                                 <input type="number" class="form-control" id="runoff_volume_reduction"
                                     name="runoff_volume_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="runoff_flux_reduction" class="form-label">Flux Reduction (Auto-set)</label>
+                                <label for="runoff_flux_reduction" class="form-label">Flux Reduction</label>
                                 <input type="number" class="form-control" id="runoff_flux_reduction"
                                     name="runoff_flux_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
                             </div>
                         </div>
-                        <div class="row mt-2">
+                        <div class="row g-3 mt-2">
                             <div class="col-md-6">
-                                <label for="erosion_mass_reduction" class="form-label">Erosion Mass Reduction
-                                    (Auto-set)</label>
+                                <label for="erosion_mass_reduction" class="form-label">Erosion Mass Reduction</label>
                                 <input type="number" class="form-control" id="erosion_mass_reduction"
                                     name="erosion_mass_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="erosion_flux_reduction" class="form-label">Erosion Flux Reduction
-                                    (Auto-set)</label>
+                                <label for="erosion_flux_reduction" class="form-label">Erosion Flux Reduction</label>
                                 <input type="number" class="form-control" id="erosion_flux_reduction"
                                     name="erosion_flux_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
                             </div>
@@ -110,8 +114,10 @@
 
                     <!-- Spray Drift Mitigation -->
                     <div class="mb-4">
-                        <h6><i class="fas fa-wind me-2"></i>Spray Drift Mitigation</h6>
-                        <div class="row">
+                        <h5 class="fw-bold text-primary mb-3">
+                            <i class="fas fa-wind me-2"></i>Spray Drift Mitigation
+                        </h5>
+                        <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="nozzle_reduction" class="form-label">Nozzle Reduction (%)</label>
                                 <input type="number" class="form-control" id="nozzle_reduction" name="nozzle_reduction"
@@ -123,7 +129,7 @@
                                     value="0" min="0" max="100">
                             </div>
                         </div>
-                        <div class="row mt-2">
+                        <div class="row g-3 mt-2">
                             <div class="col-md-6">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="use_step3_mass_loadings"
@@ -145,22 +151,32 @@
                         </div>
                     </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-magic me-2"></i>Generate SWAN Files
-                        </button>
-                    </div>
-
                     <!-- Output Naming Preview -->
-                    <div class="mt-4">
-                        <h6><i class="fas fa-eye me-2"></i>Output Naming Preview</h6>
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-primary mb-3">
+                            <i class="fas fa-eye me-2"></i>Output Naming Preview
+                        </h5>
                         <div class="alert alert-info">
-                            <div class="small">
-                                <strong>Output Directory:</strong> <code id="output-preview">PROJECT_NAME</code><br>
-                                <strong>TPF File:</strong> <code id="tpf-preview">PROJECT_NAME.tpf</code><br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Output Directory:</strong><br>
+                                    <code id="output-preview" class="fs-6">PROJECT_NAME</code>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>TPF File:</strong><br>
+                                    <code id="tpf-preview" class="fs-6">PROJECT_NAME.tpf</code>
+                                </div>
+                            </div>
+                            <div class="mt-2 small">
                                 <em>Naming convention: PROJECT_NAME_PARAMETERS (e.g., LLGL625_90N_20B_10L&M)</em>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic me-2"></i>Generate SWAN Files
+                        </button>
                     </div>
                 </form>
             </div>
@@ -169,7 +185,7 @@
 
     <!-- Project Summary -->
     <div class="col-lg-4">
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header">
                 <h6 class="mb-0">
                     <i class="fas fa-list me-2"></i>Processed Projects ({{ projects|length }})
@@ -178,25 +194,27 @@
             <div class="card-body">
                 {% for project in projects %}
                 <div class="border-bottom pb-3 mb-3">
-                    <h6 class="text-primary">{{ project.project_name }}</h6>
+                    <h6 class="text-primary fw-bold">{{ project.project_name }}</h6>
                     <div class="small">
-                        <div><strong>Substance:</strong> {{ project.substance_name or 'Unknown' }}</div>
-                        <div><strong>Crop:</strong> {{ project.crop or 'Unknown' }}</div>
-                        <div><strong>Scenarios:</strong> {{ project.scenarios|length }}</div>
-                        <div><strong>Mitigation Count:</strong> {{ project.scenarios|length }}</div>
+                        <div class="mb-1"><strong>Substance:</strong> {{ project.substance_name or 'Unknown' }}</div>
+                        <div class="mb-1"><strong>Crop:</strong> {{ project.crop or 'Unknown' }}</div>
+                        <div class="mb-1"><strong>Scenarios:</strong> {{ project.scenarios|length }}</div>
+                        <div class="mb-1"><strong>Mitigation Count:</strong> {{ project.scenarios|length }}</div>
                         {% if project.vapour_pressure %}
-                        <div><strong>Vapour Pressure:</strong> {{ '%.2e'|format(project.vapour_pressure) }} Pa</div>
+                        <div class="mb-1"><strong>Vapour Pressure:</strong> {{ '%.2e'|format(project.vapour_pressure) }}
+                            Pa</div>
                         {% endif %}
-                        <div><strong>TXW Files:</strong> {{ project.total_txw_files }} files processed</div>
+                        <div class="mb-2"><strong>TXW Files:</strong> {{ project.total_txw_files }} files processed
+                        </div>
                         {% if project.txw_files %}
                         <div class="mt-2">
-                            <strong>TXW File Names:</strong>
+                            <strong>Sample TXW Files:</strong>
                             <ul class="small mb-0 mt-1">
-                                {% for txw_file in project.txw_files[:5] %}
+                                {% for txw_file in project.txw_files[:3] %}
                                 <li>{{ txw_file.filename or 'Unknown' }}</li>
                                 {% endfor %}
-                                {% if project.txw_files|length > 5 %}
-                                <li><em>... and {{ project.txw_files|length - 5 }} more</em></li>
+                                {% if project.txw_files|length > 3 %}
+                                <li><em>... and {{ project.txw_files|length - 3 }} more</em></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -208,7 +226,7 @@
         </div>
 
         <!-- Template Information -->
-        <div class="card mt-3">
+        <div class="card">
             <div class="card-header">
                 <h6 class="mb-0">
                     <i class="fas fa-file-code me-2"></i>Template Information
@@ -216,23 +234,18 @@
             </div>
             <div class="card-body">
                 <div class="small">
-                    <div><strong>Template:</strong> BIXSC45_1AP_10mS_10m_VFS.tpf</div>
-                    <div><strong>Run-off Mode:</strong> ManualReduction (FOCUS-compliant)</div>
-                    <div><strong>FOCUS Scenarios:</strong></div>
-                    <ul class="small">
+                    <div class="mb-2"><strong>Template:</strong> BIXSC45_1AP_10mS_10m_VFS.tpf</div>
+                    <div class="mb-2"><strong>Run-off Mode:</strong> ManualReduction (FOCUS-compliant)</div>
+                    <div class="mb-2"><strong>FOCUS Scenarios:</strong></div>
+                    <ul class="small mb-3">
                         <li><strong>10m VFS Buffer:</strong> Volume 0.6, Erosion 0.85</li>
                         <li><strong>20m VFS Buffer:</strong> Volume 0.8, Erosion 0.95</li>
                     </ul>
-                    <div><strong>Placeholders:</strong></div>
-                    <ul class="small">
+                    <div class="mb-2"><strong>Key Placeholders:</strong></div>
+                    <ul class="small mb-0">
                         <li><code>&lt;rCrop&gt;</code> - Crop name</li>
                         <li><code>&lt;rCompund&gt;</code> - Substance name</li>
                         <li><code>&lt;nApps&gt;</code> - Number of applications</li>
-                        <li><code>&lt;srcProjName&gt;</code> - Source project name</li>
-                        <li><code>&lt;srcProjPath&gt;</code> - Source project path</li>
-                        <li><code>&lt;outputProjPath&gt;</code> - Output project path</li>
-                        <li><code>&lt;SWANtpf&gt;</code> - Parameter filename</li>
-                        <li><code>&lt;fName&gt;</code> - Filename</li>
                         <li><code>&lt;ROVolRed&gt;</code> - Runoff volume reduction</li>
                         <li><code>&lt;ROFluxRed&gt;</code> - Runoff flux reduction</li>
                         <li><code>&lt;ErosMassRed&gt;</code> - Erosion mass reduction</li>
