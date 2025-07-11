@@ -135,37 +135,86 @@
                                 "EXAMPLE_70N_10L&M" and "EXAMPLE_70N_20L&M".</p>
                         </div>
 
+                        <!-- Multi-Parameter Selection Reset Button -->
+                        <div class="mb-3 d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-danger btn-sm" id="resetParametersBtn">
+                                <i class="fas fa-undo me-1"></i>Reset Multi-Parameter Selection
+                            </button>
+                        </div>
+
                         <!-- Nozzle Reduction Selection -->
                         <div class="mb-4">
                             <label class="form-label fw-bold">Nozzle Reduction (%)</label>
                             <div class="row g-2">
+                                <div class="col-md-8">
+                                    <label for="nozzle_custom" class="form-label">Values (comma-separated)</label>
+                                    <input type="text" class="form-control" id="nozzle_custom" value="0"
+                                        placeholder="e.g., 0, 25, 40, 60, 85"
+                                        title="Enter nozzle reduction values separated by commas">
+                                    <div class="form-text">Enter any values from 0-100 (0 = no reduction)</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm mt-4"
+                                        onclick="addCustomNozzles()">
+                                        <i class="fas fa-plus me-1"></i>Update Values
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buffer Width Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Buffer Width (m)</label>
+                            <div class="row g-2 mb-3">
                                 <div class="col-md-3">
                                     <div class="form-check">
-                                        <input class="form-check-input nozzle-checkbox" type="checkbox" id="nozzle_0"
-                                            value="0">
-                                        <label class="form-check-label" for="nozzle_0">0% (No reduction)</label>
+                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_10"
+                                            value="10">
+                                        <label class="form-check-label" for="buffer_10">10m</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check">
-                                        <input class="form-check-input nozzle-checkbox" type="checkbox" id="nozzle_50"
+                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_20"
+                                            value="20">
+                                        <label class="form-check-label" for="buffer_20">20m</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_50"
                                             value="50">
-                                        <label class="form-check-label" for="nozzle_50">50%</label>
+                                        <label class="form-check-label" for="buffer_50">50m</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check">
-                                        <input class="form-check-input nozzle-checkbox" type="checkbox" id="nozzle_70"
+                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_70"
                                             value="70">
-                                        <label class="form-check-label" for="nozzle_70">70%</label>
+                                        <label class="form-check-label" for="buffer_70">70m</label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-check">
-                                        <input class="form-check-input nozzle-checkbox" type="checkbox" id="nozzle_90"
-                                            value="90">
-                                        <label class="form-check-label" for="nozzle_90">90%</label>
+                                        <input class="form-check-input" type="checkbox" id="buffer_custom_checkbox">
+                                        <label class="form-check-label" for="buffer_custom_checkbox">Custom</label>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row g-2" id="buffer_custom_section" style="display: none;">
+                                <div class="col-md-8">
+                                    <label for="buffer_custom" class="form-label">Custom Values
+                                        (comma-separated)</label>
+                                    <input type="text" class="form-control" id="buffer_custom"
+                                        placeholder="e.g., 5, 15, 25, 35, 45"
+                                        title="Enter custom buffer width values separated by commas">
+                                    <div class="form-text">Add any additional values (0-100)</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm mt-4"
+                                        onclick="addCustomBuffers()">
+                                        <i class="fas fa-plus me-1"></i>Add Custom Values
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -190,41 +239,6 @@
                                         <label class="form-check-label" for="runoff_20m">
                                             20m VFS Buffer (Volume: 0.8, Erosion: 0.95)
                                         </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Buffer Width Selection -->
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Buffer Width (m)</label>
-                            <div class="row g-2">
-                                <div class="col-md-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_0"
-                                            value="0">
-                                        <label class="form-check-label" for="buffer_0">0m (No buffer)</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_5"
-                                            value="5">
-                                        <label class="form-check-label" for="buffer_5">5m</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_10"
-                                            value="10">
-                                        <label class="form-check-label" for="buffer_10">10m</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input buffer-checkbox" type="checkbox" id="buffer_20"
-                                            value="20">
-                                        <label class="form-check-label" for="buffer_20">20m</label>
                                     </div>
                                 </div>
                             </div>
@@ -372,9 +386,14 @@
         console.log('DOM loaded, setting up multi-parameter selection...');
 
         // Get all checkbox groups
-        const nozzleCheckboxes = document.querySelectorAll('.nozzle-checkbox');
         const runoffCheckboxes = document.querySelectorAll('.runoff-checkbox');
         const bufferCheckboxes = document.querySelectorAll('.buffer-checkbox');
+
+        // Custom input fields
+        const nozzleCustomInput = document.getElementById('nozzle_custom');
+        const bufferCustomInput = document.getElementById('buffer_custom');
+        const bufferCustomCheckbox = document.getElementById('buffer_custom_checkbox');
+        const bufferCustomSection = document.getElementById('buffer_custom_section');
 
         // Hidden form fields for legacy compatibility
         const nozzleReductionField = document.getElementById('nozzle_reduction');
@@ -385,11 +404,24 @@
         const combinationsPreview = document.getElementById('combinationsPreview');
         const combinationCount = document.getElementById('combinationCount');
 
+        // Function to parse custom values from input
+        function parseCustomValues(inputValue) {
+            if (!inputValue || inputValue.trim() === '') return [];
+
+            return inputValue.split(',')
+                .map(val => val.trim())
+                .filter(val => val !== '')
+                .map(val => {
+                    const num = parseInt(val);
+                    return isNaN(num) ? null : num;
+                })
+                .filter(val => val !== null && val >= 0 && val <= 100);
+        }
+
         // Function to generate all parameter combinations
         function generateCombinations() {
-            const selectedNozzles = Array.from(nozzleCheckboxes)
-                .filter(cb => cb.checked)
-                .map(cb => parseInt(cb.value));
+            // Get nozzle values from text input
+            const nozzleValues = parseCustomValues(nozzleCustomInput.value);
 
             const selectedRunoffs = Array.from(runoffCheckboxes)
                 .filter(cb => cb.checked)
@@ -399,8 +431,14 @@
                 .filter(cb => cb.checked)
                 .map(cb => parseInt(cb.value));
 
+            // Get custom buffer values only if custom checkbox is checked
+            const customBuffers = bufferCustomCheckbox.checked ? parseCustomValues(bufferCustomInput.value) : [];
+
+            // Combine checkbox and custom buffer values
+            const allBuffers = [...new Set([...selectedBuffers, ...customBuffers])];
+
             // If no parameters selected, show default message
-            if (selectedNozzles.length === 0 && selectedRunoffs.length === 0 && selectedBuffers.length === 0) {
+            if (nozzleValues.length === 0 && selectedRunoffs.length === 0 && allBuffers.length === 0) {
                 combinationsPreview.innerHTML = '<p class="text-muted mb-0">Select parameters above to see the combinations that will be generated...</p>';
                 combinationCount.textContent = '0';
                 return [];
@@ -408,11 +446,11 @@
 
             // Generate all combinations
             const combinations = [];
-            const nozzleValues = selectedNozzles.length > 0 ? selectedNozzles : [0];
+            const nozzleVals = nozzleValues.length > 0 ? nozzleValues : [0];
             const runoffValues = selectedRunoffs.length > 0 ? selectedRunoffs : [''];
-            const bufferValues = selectedBuffers.length > 0 ? selectedBuffers : [0];
+            const bufferValues = allBuffers.length > 0 ? allBuffers : [0];
 
-            for (const nozzle of nozzleValues) {
+            for (const nozzle of nozzleVals) {
                 for (const runoff of runoffValues) {
                     for (const buffer of bufferValues) {
                         const combination = {
@@ -471,14 +509,81 @@
             combinationCount.textContent = combinations.length;
         }
 
-        // Add event listeners to all checkboxes
-        function addCheckboxListeners() {
-            const allCheckboxes = [...nozzleCheckboxes, ...runoffCheckboxes, ...bufferCheckboxes];
+        // Function to update nozzle values
+        function addCustomNozzles() {
+            const customValues = parseCustomValues(nozzleCustomInput.value);
+            if (customValues.length > 0) {
+                generateCombinations();
+            } else {
+                alert('Please enter valid nozzle reduction values (0-100, comma-separated)');
+            }
+        }
+
+        // Function to add custom buffer values
+        function addCustomBuffers() {
+            const customValues = parseCustomValues(bufferCustomInput.value);
+            if (customValues.length > 0) {
+                generateCombinations();
+                bufferCustomInput.value = ''; // Clear input after adding
+            } else {
+                alert('Please enter valid buffer width values (0-100, comma-separated)');
+            }
+        }
+
+        // Add event listeners to all checkboxes and inputs
+        function addEventListeners() {
+            const allCheckboxes = [...runoffCheckboxes, ...bufferCheckboxes];
 
             allCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     generateCombinations();
                 });
+            });
+
+            // Add listeners for custom input fields
+            nozzleCustomInput.addEventListener('input', function () {
+                generateCombinations();
+            });
+
+            bufferCustomInput.addEventListener('input', function () {
+                generateCombinations();
+            });
+
+            // Add listener for custom buffer checkbox to show/hide section
+            bufferCustomCheckbox.addEventListener('change', function () {
+                bufferCustomSection.style.display = this.checked ? 'block' : 'none';
+                generateCombinations();
+            });
+
+            // Add listeners for Enter key on custom inputs
+            nozzleCustomInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    addCustomNozzles();
+                }
+            });
+
+            bufferCustomInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    addCustomBuffers();
+                }
+            });
+
+            // Add listener for reset button
+            const resetBtn = document.getElementById('resetParametersBtn');
+            resetBtn.addEventListener('click', function () {
+                // Reset nozzle reduction to 0
+                nozzleCustomInput.value = '0';
+                // Uncheck all buffer checkboxes
+                bufferCheckboxes.forEach(cb => { cb.checked = false; });
+                // Uncheck custom buffer checkbox and hide custom section
+                bufferCustomCheckbox.checked = false;
+                bufferCustomSection.style.display = 'none';
+                // Clear custom buffer input
+                bufferCustomInput.value = '';
+                // Uncheck all runoff checkboxes
+                runoffCheckboxes.forEach(cb => { cb.checked = false; });
+                // Update combinations preview (should show default: nozzle 0, buffer 0, no runoff)
+                generateCombinations();
             });
         }
 
@@ -533,7 +638,7 @@
         });
 
         // Initialize
-        addCheckboxListeners();
+        addEventListeners();
         generateCombinations();
 
         console.log('Multi-parameter selection setup complete');
