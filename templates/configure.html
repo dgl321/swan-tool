@@ -65,27 +65,45 @@
                     <div class="mb-4">
                         <h6><i class="fas fa-water me-2"></i>Run-off Mitigation Parameters</h6>
                         <div class="row">
+                            <div class="col-md-12">
+                                <label for="mitigation_scenario" class="form-label">FOCUS Mitigation Scenario</label>
+                                <select class="form-control" id="mitigation_scenario" name="mitigation_scenario"
+                                    required>
+                                    <option value="">Select a FOCUS scenario...</option>
+                                    <option value="10m">10m VFS Buffer (Volume: 0.6, Erosion: 0.85)</option>
+                                    <option value="20m">20m VFS Buffer (Volume: 0.8, Erosion: 0.95)</option>
+                                </select>
+                                <div class="form-text text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    FOCUS-accepted fractional reduction scenarios for runoff mitigation
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
                             <div class="col-md-6">
-                                <label for="runoff_volume_reduction" class="form-label">Volume Reduction</label>
+                                <label for="runoff_volume_reduction" class="form-label">Volume Reduction
+                                    (Auto-set)</label>
                                 <input type="number" class="form-control" id="runoff_volume_reduction"
-                                    name="runoff_volume_reduction" value="0.0" step="0.1" min="0" max="1">
+                                    name="runoff_volume_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="runoff_flux_reduction" class="form-label">Flux Reduction</label>
+                                <label for="runoff_flux_reduction" class="form-label">Flux Reduction (Auto-set)</label>
                                 <input type="number" class="form-control" id="runoff_flux_reduction"
-                                    name="runoff_flux_reduction" value="0.0" step="0.1" min="0" max="1">
+                                    name="runoff_flux_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-6">
-                                <label for="erosion_mass_reduction" class="form-label">Erosion Mass Reduction</label>
+                                <label for="erosion_mass_reduction" class="form-label">Erosion Mass Reduction
+                                    (Auto-set)</label>
                                 <input type="number" class="form-control" id="erosion_mass_reduction"
-                                    name="erosion_mass_reduction" value="0.0" step="0.1" min="0" max="1">
+                                    name="erosion_mass_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label for="erosion_flux_reduction" class="form-label">Erosion Flux Reduction</label>
+                                <label for="erosion_flux_reduction" class="form-label">Erosion Flux Reduction
+                                    (Auto-set)</label>
                                 <input type="number" class="form-control" id="erosion_flux_reduction"
-                                    name="erosion_flux_reduction" value="0.0" step="0.1" min="0" max="1">
+                                    name="erosion_flux_reduction" value="0.0" step="0.1" min="0" max="1" readonly>
                             </div>
                         </div>
                     </div>
@@ -157,8 +175,19 @@
                         {% if project.vapour_pressure %}
                         <div><strong>Vapour Pressure:</strong> {{ '%.2e'|format(project.vapour_pressure) }} Pa</div>
                         {% endif %}
-                        {% if project.txw_data %}
-                        <div><strong>TXW Files:</strong> {{ project.txw_data.filename or 'N/A' }}</div>
+                        <div><strong>TXW Files:</strong> {{ project.total_txw_files }} files processed</div>
+                        {% if project.txw_files %}
+                        <div class="mt-2">
+                            <strong>TXW File Names:</strong>
+                            <ul class="small mb-0 mt-1">
+                                {% for txw_file in project.txw_files[:5] %}
+                                <li>{{ txw_file.filename or 'Unknown' }}</li>
+                                {% endfor %}
+                                {% if project.txw_files|length > 5 %}
+                                <li><em>... and {{ project.txw_files|length - 5 }} more</em></li>
+                                {% endif %}
+                            </ul>
+                        </div>
                         {% endif %}
                     </div>
                 </div>
@@ -176,6 +205,12 @@
             <div class="card-body">
                 <div class="small">
                     <div><strong>Template:</strong> BIXSC45_1AP_10mS_10m_VFS.tpf</div>
+                    <div><strong>Run-off Mode:</strong> ManualReduction (FOCUS-compliant)</div>
+                    <div><strong>FOCUS Scenarios:</strong></div>
+                    <ul class="small">
+                        <li><strong>10m VFS Buffer:</strong> Volume 0.6, Erosion 0.85</li>
+                        <li><strong>20m VFS Buffer:</strong> Volume 0.8, Erosion 0.95</li>
+                    </ul>
                     <div><strong>Placeholders:</strong></div>
                     <ul class="small">
                         <li><code>&lt;rCrop&gt;</code> - Crop name</li>
@@ -186,6 +221,10 @@
                         <li><code>&lt;outputProjPath&gt;</code> - Output project path</li>
                         <li><code>&lt;SWANtpf&gt;</code> - Parameter filename</li>
                         <li><code>&lt;fName&gt;</code> - Filename</li>
+                        <li><code>&lt;ROVolRed&gt;</code> - Runoff volume reduction</li>
+                        <li><code>&lt;ROFluxRed&gt;</code> - Runoff flux reduction</li>
+                        <li><code>&lt;ErosMassRed&gt;</code> - Erosion mass reduction</li>
+                        <li><code>&lt;ErosFluxRed&gt;</code> - Erosion flux reduction</li>
                     </ul>
                 </div>
             </div>
@@ -197,6 +236,8 @@
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        console.log('DOM loaded, setting up mitigation scenario handler...');
+
         // Add form validation
         const form = document.querySelector('form');
         form.addEventListener('submit', function (e) {
@@ -217,6 +258,57 @@
                 alert('Please fill in all required fields.');
             }
         });
+
+        // Auto-update fractional reduction values based on selected scenario
+        const mitigationScenario = document.getElementById('mitigation_scenario');
+        const runoffVolumeReduction = document.getElementById('runoff_volume_reduction');
+        const runoffFluxReduction = document.getElementById('runoff_flux_reduction');
+        const erosionMassReduction = document.getElementById('erosion_mass_reduction');
+        const erosionFluxReduction = document.getElementById('erosion_flux_reduction');
+
+        console.log('Found elements:', {
+            mitigationScenario: mitigationScenario,
+            runoffVolumeReduction: runoffVolumeReduction,
+            runoffFluxReduction: runoffFluxReduction,
+            erosionMassReduction: erosionMassReduction,
+            erosionFluxReduction: erosionFluxReduction
+        });
+
+        function updateReductionValues() {
+            const scenario = mitigationScenario.value;
+            console.log('Updating reduction values for scenario:', scenario);
+
+            if (scenario === '10m') {
+                // 10m VFS Buffer: Volume 0.6, Erosion 0.85
+                runoffVolumeReduction.value = '0.6';
+                runoffFluxReduction.value = '0.6';
+                erosionMassReduction.value = '0.85';
+                erosionFluxReduction.value = '0.85';
+                console.log('Set 10m values: 0.6, 0.6, 0.85, 0.85');
+            } else if (scenario === '20m') {
+                // 20m VFS Buffer: Volume 0.8, Erosion 0.95
+                runoffVolumeReduction.value = '0.8';
+                runoffFluxReduction.value = '0.8';
+                erosionMassReduction.value = '0.95';
+                erosionFluxReduction.value = '0.95';
+                console.log('Set 20m values: 0.8, 0.8, 0.95, 0.95');
+            } else {
+                // Reset to 0 if no scenario selected
+                runoffVolumeReduction.value = '0.0';
+                runoffFluxReduction.value = '0.0';
+                erosionMassReduction.value = '0.0';
+                erosionFluxReduction.value = '0.0';
+                console.log('Reset values to 0.0');
+            }
+        }
+
+        // Run immediately on page load
+        updateReductionValues();
+
+        // Also run on change events
+        mitigationScenario.addEventListener('change', updateReductionValues);
+
+        console.log('Mitigation scenario handler setup complete');
     });
 </script>
 {% endblock %}

@@ -136,31 +136,27 @@ def process_single_project(project_path: str, temp_dir: str) -> list:
     # Parse report files
     report_data = report_parser.parse_multiple_report_files(project_path)
     
-    # Combine data for each project
-    for txw_info in txw_data:
-        project_name = os.path.basename(project_path)
-        
-        # Find matching report data
-        report_info = None
-        for report in report_data:
-            if report.get('substance_name') == txw_info.get('substance_name'):
-                report_info = report
-                break
-                
-        # Create project data
-        project_data = {
-            'project_name': project_name,
-            'project_path': project_path,
-            'txw_data': txw_info,
-            'report_data': report_info,
-            'substance_name': txw_info.get('substance_name'),
-            'crop': report_info.get('crop') if report_info else 'Unknown',
-            'num_applications': 1,  # Default value
-            'scenarios': extract_scenarios(txw_data),
-            'vapour_pressure': txw_info.get('vapour_pressure')  # Extract from TXW file
-        }
-        
-        projects.append(project_data)
+    # Group TXW files by project name
+    project_name = os.path.basename(project_path)
+    
+    # Find matching report data (use the first one since they should be the same for the project)
+    report_info = report_data[0] if report_data else None
+    
+    # Create consolidated project data
+    project_data = {
+        'project_name': project_name,
+        'project_path': project_path,
+        'txw_files': txw_data,  # All TXW files for this project
+        'report_data': report_info,
+        'substance_name': txw_data[0].get('substance_name') if txw_data else 'Unknown',
+        'crop': report_info.get('crop') if report_info else 'Unknown',
+        'num_applications': 1,  # Default value
+        'scenarios': extract_scenarios(txw_data),
+        'vapour_pressure': txw_data[0].get('vapour_pressure') if txw_data else None,  # Use first TXW file's vapour pressure
+        'total_txw_files': len(txw_data)
+    }
+    
+    projects.append(project_data)
         
     return projects
 
@@ -318,6 +314,27 @@ def prepare_tpf_parameters(project: dict, form_data: dict) -> dict:
         vapour_pressure = float(form_data.get('vapour_pressure', 0.000000046))
         print(f"Using form vapour pressure: {vapour_pressure}")
     
+    # Handle mitigation scenario selection
+    mitigation_scenario = form_data.get('mitigation_scenario', '')
+    if mitigation_scenario == '10m':
+        # 10m VFS Buffer: Volume 0.6, Erosion 0.85
+        runoff_volume_reduction = 0.6
+        runoff_flux_reduction = 0.6
+        erosion_mass_reduction = 0.85
+        erosion_flux_reduction = 0.85
+    elif mitigation_scenario == '20m':
+        # 20m VFS Buffer: Volume 0.8, Erosion 0.95
+        runoff_volume_reduction = 0.8
+        runoff_flux_reduction = 0.8
+        erosion_mass_reduction = 0.95
+        erosion_flux_reduction = 0.95
+    else:
+        # Use form values if no scenario selected (fallback)
+        runoff_volume_reduction = float(form_data.get('runoff_volume_reduction', 0.0))
+        runoff_flux_reduction = float(form_data.get('runoff_flux_reduction', 0.0))
+        erosion_mass_reduction = float(form_data.get('erosion_mass_reduction', 0.0))
+        erosion_flux_reduction = float(form_data.get('erosion_flux_reduction', 0.0))
+    
     parameters = {
         'crop': project.get('crop', 'Unknown'),
         'substance_name': project.get('substance_name', 'Unknown'),
@@ -329,10 +346,10 @@ def prepare_tpf_parameters(project: dict, form_data: dict) -> dict:
         'filename': f"{project['project_name']}.tpf",
         'vapour_pressure': vapour_pressure,  # Use extracted or form value
         'mitigation_count': mitigation_count,  # Automatically set based on scenarios
-        'runoff_volume_reduction': float(form_data.get('runoff_volume_reduction', 0.0)),
-        'runoff_flux_reduction': float(form_data.get('runoff_flux_reduction', 0.0)),
-        'erosion_mass_reduction': float(form_data.get('erosion_mass_reduction', 0.0)),
-        'erosion_flux_reduction': float(form_data.get('erosion_flux_reduction', 0.0)),
+        'runoff_volume_reduction': runoff_volume_reduction,
+        'runoff_flux_reduction': runoff_flux_reduction,
+        'erosion_mass_reduction': erosion_mass_reduction,
+        'erosion_flux_reduction': erosion_flux_reduction,
         'nozzle_reduction': int(form_data.get('nozzle_reduction', 0)),
         'use_step3_mass_loadings': form_data.get('use_step3_mass_loadings') == 'on',
         'select_buffer_width': form_data.get('select_buffer_width') == 'on',
