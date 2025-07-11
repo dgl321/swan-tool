@@ -119,6 +119,37 @@ def validate_project_path(project_path: str) -> bool:
         
     return True
 
+def generate_parameter_string(form_data: dict) -> str:
+    """Generate parameter string for output directory naming."""
+    parameters = []
+    
+    # Nozzle reduction (N)
+    nozzle_reduction = int(form_data.get('nozzle_reduction', 0))
+    if nozzle_reduction > 0:
+        parameters.append(f"{nozzle_reduction}N")
+    
+    # Buffer width (B)
+    buffer_width = int(form_data.get('buffer_width', 0))
+    if buffer_width > 0:
+        parameters.append(f"{buffer_width}B")
+    
+    # Runoff mitigation scenario
+    mitigation_scenario = form_data.get('mitigation_scenario', '')
+    if mitigation_scenario == '10m':
+        parameters.append("10L&M")
+    elif mitigation_scenario == '20m':
+        parameters.append("20L&M")
+    elif mitigation_scenario.startswith('VFS'):
+        # For VFSMOD scenarios, extract the distance value
+        # This would need to be implemented when VFSMOD is added
+        pass
+    
+    # Join parameters with underscores
+    if parameters:
+        return "_" + "_".join(parameters)
+    else:
+        return ""
+
 def process_single_project(project_path: str, temp_dir: str) -> list:
     """Process a single TOXSWA project folder."""
     projects = []
@@ -234,6 +265,9 @@ def generate_files():
     # Get form data
     form_data = request.form.to_dict()
     
+    # Generate parameter string for naming
+    param_string = generate_parameter_string(form_data)
+    
     # Load template
     template_path = form_data.get('template_path', 'BIXSC45_1AP_10mS_10m_VFS.tpf')
     if not os.path.exists(template_path):
@@ -250,8 +284,9 @@ def generate_files():
             project_path = project['project_path']
             project_name = project['project_name']
             
-            # Create output directory in the same location as the original project
-            project_output_dir = os.path.join(os.path.dirname(project_path), f"{project_name}_SWAN_Output")
+            # Create output directory with parameter-based naming
+            output_dir_name = f"{project_name}{param_string}"
+            project_output_dir = os.path.join(os.path.dirname(project_path), output_dir_name)
             os.makedirs(project_output_dir, exist_ok=True)
             
             # Copy all files from the original project to the output directory
@@ -262,8 +297,8 @@ def generate_files():
             # Prepare parameters for TPF generation
             parameters = prepare_tpf_parameters(project, form_data)
             
-            # Generate TPF file
-            tpf_filename = f"{project_name}.tpf"
+            # Generate TPF file with parameter-based naming
+            tpf_filename = f"{project_name}{param_string}.tpf"
             tpf_path = os.path.join(project_output_dir, tpf_filename)
             
             generated_tpf = tpf_generator.generate_tpf(parameters, tpf_path)
@@ -280,7 +315,8 @@ def generate_files():
                 'project_name': project_name,
                 'output_dir': project_output_dir,
                 'tpf_file': generated_tpf,
-                'bat_file': generated_bat
+                'bat_file': generated_bat,
+                'param_string': param_string
             })
         
         # Create a combined zip archive with all projects
@@ -335,6 +371,9 @@ def prepare_tpf_parameters(project: dict, form_data: dict) -> dict:
         erosion_mass_reduction = float(form_data.get('erosion_mass_reduction', 0.0))
         erosion_flux_reduction = float(form_data.get('erosion_flux_reduction', 0.0))
     
+    # Generate parameter string for filename
+    param_string = generate_parameter_string(form_data)
+    
     parameters = {
         'crop': project.get('crop', 'Unknown'),
         'substance_name': project.get('substance_name', 'Unknown'),
@@ -342,8 +381,8 @@ def prepare_tpf_parameters(project: dict, form_data: dict) -> dict:
         'source_project_name': project.get('project_name', 'Unknown'),
         'source_project_path': project.get('project_path', 'Unknown'),
         'output_project_path': form_data.get('output_project_path', 'C:\\SwashProjects\\Output'),
-        'parameter_filename': f"{project['project_name']}.tpf",
-        'filename': f"{project['project_name']}.tpf",
+        'parameter_filename': f"{project['project_name']}{param_string}.tpf",
+        'filename': f"{project['project_name']}{param_string}.tpf",
         'vapour_pressure': vapour_pressure,  # Use extracted or form value
         'mitigation_count': mitigation_count,  # Automatically set based on scenarios
         'runoff_volume_reduction': runoff_volume_reduction,

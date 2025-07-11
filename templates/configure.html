@@ -150,6 +150,18 @@
                             <i class="fas fa-magic me-2"></i>Generate SWAN Files
                         </button>
                     </div>
+
+                    <!-- Output Naming Preview -->
+                    <div class="mt-4">
+                        <h6><i class="fas fa-eye me-2"></i>Output Naming Preview</h6>
+                        <div class="alert alert-info">
+                            <div class="small">
+                                <strong>Output Directory:</strong> <code id="output-preview">PROJECT_NAME</code><br>
+                                <strong>TPF File:</strong> <code id="tpf-preview">PROJECT_NAME.tpf</code><br>
+                                <em>Naming convention: PROJECT_NAME_PARAMETERS (e.g., LLGL625_90N_20B_10L&M)</em>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -309,6 +321,52 @@
         mitigationScenario.addEventListener('change', updateReductionValues);
 
         console.log('Mitigation scenario handler setup complete');
+
+        // Update output naming preview
+        function updateOutputPreview() {
+            const projectName = '{{ projects[0].project_name if projects else "PROJECT_NAME" }}';
+            const mitigationScenario = document.getElementById('mitigation_scenario').value;
+            const nozzleReduction = document.getElementById('nozzle_reduction').value;
+            const bufferWidth = document.getElementById('buffer_width').value;
+
+            let paramString = '';
+            const params = [];
+
+            // Add nozzle reduction
+            if (nozzleReduction > 0) {
+                params.push(`${nozzleReduction}N`);
+            }
+
+            // Add buffer width
+            if (bufferWidth > 0) {
+                params.push(`${bufferWidth}B`);
+            }
+
+            // Add mitigation scenario
+            if (mitigationScenario === '10m') {
+                params.push('10L&M');
+            } else if (mitigationScenario === '20m') {
+                params.push('20L&M');
+            }
+
+            if (params.length > 0) {
+                paramString = '_' + params.join('_');
+            }
+
+            const outputName = projectName + paramString;
+            const tpfName = outputName + '.tpf';
+
+            document.getElementById('output-preview').textContent = outputName;
+            document.getElementById('tpf-preview').textContent = tpfName;
+        }
+
+        // Update preview on any parameter change
+        document.getElementById('mitigation_scenario').addEventListener('change', updateOutputPreview);
+        document.getElementById('nozzle_reduction').addEventListener('input', updateOutputPreview);
+        document.getElementById('buffer_width').addEventListener('input', updateOutputPreview);
+
+        // Initial preview update
+        updateOutputPreview();
     });
 </script>
 {% endblock %}
