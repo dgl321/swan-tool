@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Swan2VFSmodGUI xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Paths>
+    <inpFilePath>c:\swashprojects\BIXSC45_1AP\PRZM\cereals_spring\R4-CS-.INP</inpFilePath>
+    <p2tFilePath>c:\swashprojects\BIXSC45_1AP\PRZM\cereals_spring\04637-C1.p2t</p2tFilePath>
+    <ztsFilePath>c:\swashprojects\BIXSC45_1AP\PRZM\cereals_spring\R4-CS-.ZTS</ztsFilePath>
+    <ScenarioUserInputFilePath>C:\SwashProjects\BIXSC45_1AP_10mS_10m_VFS\VFSmod\cereals_spring\R4\Stream_Parent\R4ScenarioUserInput.xml</ScenarioUserInputFilePath>
+    <VFSmodGUI2SwanPath>C:\SwashProjects\BIXSC45_1AP_10mS_10m_VFS\VFSmod\cereals_spring\R4\Stream_Parent</VFSmodGUI2SwanPath>
+  </Paths>
+  <GeneralInfo>
+    <BufferStripLen>10</BufferStripLen>
+    <ParMet>Parent</ParMet>
+    <FOCUSScenario>R4</FOCUSScenario>
+    <FOCUSWaterBody>Stream</FOCUSWaterBody>
+  </GeneralInfo>
+</Swan2VFSmodGUI>

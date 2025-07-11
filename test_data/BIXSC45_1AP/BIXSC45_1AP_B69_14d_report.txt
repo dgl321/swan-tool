@@ -1,0 +1,50 @@
+
+
+
+      * SWASH report file
+      * made by FOCUS-SWASH UI v. 5 (internal version 5.1.0, 02 April 2015) 
+      *
+      * File Name   : C:\Swashprojects\BIXSC45_1AP_B69_14d\BIXSC45_1AP_B69_14d_report.txt
+      * Description : Bixafen SC 1x45 BBCH 69 14d int.
+      * Substance   : BIXAFEN_SW
+      *
+      * Creation    : 09-Jul-2025, 10:51
+      *
+      * Remarks : SWASH report helps you to set up the needed runs to calculate the PECsw and PECsed, occuring in the EU
+      *           for the selected substance, used on the selected crop. The scenario code informs you which models you need to
+      *           run for this scenario.
+      *           D1-D6: drainage entries calculated by the MACRO model, fate in surface water calculated by the TOXSWA model
+      *                  
+      *           R1-R4: runoff and erosion entries calculated by the PRZM model, fate in surface water calculated by the TOXSWA model
+      *                  
+      *
+      *           For STREAMS the Mean Deposition and Mass Loading, as calculated by the FOCUS Drift Calculator, have been multiplied by a 
+      *           factor 1.2 to account for pesticide mass incoming from the upstream catchment as decided by the FOCUS Surface Water 
+      *           Scenarios Working Group.
+      *
+      *
+      **********************************************************************************************************************************
+      *  CREATED RUNS
+      **********************************************************************************************************************************
+      *
+      *                                                     |--------------- APPLICATION -----------------|----- on Water Surface -----|
+      * -ID------Crop(1st/2nd)-------Scenario-WaterbodyType-|-Method--------First/Last/Interval--#---Rate-|-Mean Deposition-Mass Loading
+                                                                                      (d)          (kg/ha) (% of Appl. Rate)    (mg/m2)
+      *
+      * 4630  Cereals, spring(1st)     D1_Ditch              ground spray   18-Jul/17-Aug/1      1  0.0450       1.927           0.087
+      *
+      * 4631  Cereals, spring(1st)     D1_Stream             ground spray   18-Jul/17-Aug/1      1  0.0450       1.716           0.077
+      *
+      * 4632  Cereals, spring(1st)     D3_Ditch              ground spray   28-Jun/28-Jul/1      1  0.0450       1.927           0.087
+      *
+      * 4633  Cereals, spring(1st)     D4_Pond               ground spray   9-Jul /8-Aug /1      1  0.0450       0.219           0.010
+      *
+      * 4634  Cereals, spring(1st)     D4_Stream             ground spray   9-Jul /8-Aug /1      1  0.0450       1.716           0.077
+      *
+      * 4635  Cereals, spring(1st)     D5_Pond               ground spray   4-Jun /4-Jul /1      1  0.0450       0.219           0.010
+      *
+      * 4636  Cereals, spring(1st)     D5_Stream             ground spray   4-Jun /4-Jul /1      1  0.0450       1.716           0.077
+      *
+      * 4637  Cereals, spring(1st)     R4_Stream             ground spray   4-Jul /3-Aug /1      1  0.0450       1.716           0.077
+      *
+      ************************************************** Surface WAter Scenarios Help **************************************************

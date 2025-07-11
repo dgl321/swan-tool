@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Process TOXSWA Projects - SWAN Parameter Generator{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-folder-open me-2"></i>Process TOXSWA Step 3 Projects
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-info-circle me-2"></i>Instructions</h6>
+                    <ul class="mb-0">
+                        <li>Enter the full paths to your TOXSWA Step 3 project folders</li>
+                        <li>Each folder should contain a <code>TOXSWA</code> subfolder with <code>.txw</code> files</li>
+                        <li>The project folder should also contain <code>_report.txt</code> files</li>
+                        <li>Enter one path per line in the text area below</li>
+                        <li><strong>Example:</strong> <code>test_data/BIXSC45_1AP</code> (for testing)</li>
+                    </ul>
+                </div>
+
+                <form action="{{ url_for('process_paths') }}" method="post">
+                    <div class="mb-4">
+                        <label for="project_paths" class="form-label">
+                            <i class="fas fa-folder-open me-2"></i>Enter Project Paths
+                        </label>
+                        <textarea class="form-control" id="project_paths" name="project_paths" rows="4" placeholder="Enter one project path per line, e.g.:
+test_data/BIXSC45_1AP
+C:\SwashProjects\BIXSC45_1AP
+/path/to/project/folder" required></textarea>
+                        <div class="form-text">
+                            Enter the full paths to your TOXSWA Step 3 project folders, one per line
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>Process Projects from Paths
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="testPaths()">
+                            <i class="fas fa-vial me-2"></i>Test Paths
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-check-circle text-success me-2"></i>What the tool does:</h6>
+                        <ul class="small">
+                            <li>Reads project paths and processes TOXSWA folders</li>
+                            <li>Extracts metadata from <code>.txw</code> files</li>
+                            <li>Parses PEC values from <code>_report.txt</code> files</li>
+                            <li>Generates SWAN <code>.tpf</code> parameter files</li>
+                            <li>Creates <code>TOXSWABAT.bat</code> for batch processing</li>
+                            <li>Packages everything into a downloadable ZIP archive</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-exclamation-triangle text-warning me-2"></i>Requirements:</h6>
+                        <ul class="small">
+                            <li>Valid file system paths to TOXSWA projects</li>
+                            <li>TOXSWA Step 3 project structure</li>
+                            <li><code>TOXSWA/</code> subfolder with <code>.txw</code> files</li>
+                            <li><code>_report.txt</code> files in project root</li>
+                            <li>Valid substance and crop information</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example Structure -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-folder-tree me-2"></i>Example Project Structure
+                </h6>
+            </div>
+            <div class="card-body">
+                <pre class="bg-light p-3 rounded"><code>Project_Folder/
+├── TOXSWA/
+│   ├── 4630.txw
+│   ├── 4631.txw
+│   └── ...
+├── ProjectName_report.txt
+└── other_files...</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const textarea = document.getElementById('project_paths');
+        const submitBtn = document.querySelector('button[type="submit"]');
+
+        textarea.addEventListener('input', function () {
+            const lines = this.value.split('\n').filter(line => line.trim()).length;
+            if (lines > 0) {
+                submitBtn.innerHTML = `<i class="fas fa-search me-2"></i>Process ${lines} Project Path(s)`;
+            } else {
+                submitBtn.innerHTML = `<i class="fas fa-search me-2"></i>Process Projects from Paths`;
+            }
+        });
+    });
+
+    function testPaths() {
+        const textarea = document.getElementById('project_paths');
+        const paths = textarea.value.split('\n').filter(line => line.trim());
+
+        if (paths.length === 0) {
+            alert('Please enter at least one path to test.');
+            return;
+        }
+
+        console.log('Testing paths:', paths);
+
+        // Test each path
+        paths.forEach((path, index) => {
+            const testUrl = `/test-path/${encodeURIComponent(path)}`;
+            fetch(testUrl)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(`Path ${index + 1}:`, data);
+                    if (data.exists && data.toxswa_exists) {
+                        alert(`✅ Path ${index + 1} is valid: ${data.txw_files.length} .txw files found`);
+                    } else {
+                        alert(`❌ Path ${index + 1} is invalid: ${JSON.stringify(data)}`);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error testing path ${index + 1}:`, error);
+                    alert(`❌ Error testing path ${index + 1}: ${error}`);
+                });
+        });
+    }
+</script>
+{% endblock %}

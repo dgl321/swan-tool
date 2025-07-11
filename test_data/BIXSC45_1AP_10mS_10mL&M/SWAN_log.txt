@@ -1,0 +1,121 @@
+*-----------------------------------------------------------------
+*
+* SWAN log file
+* Created by SWAN v5.0.1 at 11-Jul-2025, 15:37:50
+*
+* Processing parameter file: C:\SwashProjects\BIXSC45_1AP_10mS_10mL&M\BIXSC45_1AP_10mS_10mL&M.tpf
+*
+*-----------------------------------------------------------------
+*
+Loaded parameter file: C:\SwashProjects\BIXSC45_1AP_10mS_10mL&M\BIXSC45_1AP_10mS_10mL&M.tpf
+
+Loading source project: c:\swashprojects\BIXSC45_1AP
+Loaded TOXSWA file: 4630.txw
+Loaded TOXSWA file: 4631.txw
+Loaded TOXSWA file: 4632.txw
+Loaded TOXSWA file: 4633.txw
+Loaded TOXSWA file: 4634.txw
+Loaded TOXSWA file: 4635.txw
+Loaded TOXSWA file: 4636.txw
+Loaded TOXSWA file: 4637.txw
+Loaded support file: macro04631_p.m2t
+Loaded support file: macro04631_p.m2t
+Loaded support file: macro04632_p.m2t
+Loaded support file: macro04634_p.m2t
+Loaded support file: macro04634_p.m2t
+Loaded support file: macro04636_p.m2t
+Loaded support file: macro04636_p.m2t
+Loaded support file: 04637-C1.p2t
+Load complete
+
+Validating...
+Validation complete
+*
+*-----------------------------------------------------------------
+*
+* Run-off mitigation
+*-----------------------------------------------------------------
+*
+Reduction run-off mode:                 ManualReduction
+Fractional reduction in run-off volume: 0.6
+Fractional reduction in run-off flux:   0.6
+Fractional reduction in erosion mass:   0.85
+Fractional reduction in erosion flux:   0.85
+
+Run-off mitigation has been applied to: 04637-C1.p2t
+*
+*-----------------------------------------------------------------
+*
+* Spray drift mitigation
+*-----------------------------------------------------------------
+*
+Nozzle reduction (%): 0
+
+Use Step 3 mass loadings: No
+
+Select buffer width: Yes
+Buffer width (m):    10
+
+Enter mass loadings directly: No
+Pond mass loading (mg/m²):    0
+Ditch mass loading (mg/m²):   0
+Stream mass loading (mg/m²):  0
+
+Spray drift mitigation has been applied to: 4630.txw
+Spray drift mitigation has been applied to: 4631.txw
+Spray drift mitigation has been applied to: 4632.txw
+Spray drift mitigation has been applied to: 4633.txw
+Spray drift mitigation has been applied to: 4634.txw
+Spray drift mitigation has been applied to: 4635.txw
+Spray drift mitigation has been applied to: 4636.txw
+Spray drift mitigation has been applied to: 4637.txw
+*
+*-----------------------------------------------------------------
+*
+* Dry deposition after volatilisation
+*-----------------------------------------------------------------
+*
+Dry deposition mitigation was not applied to any file
+*
+*-----------------------------------------------------------------
+*
+Saving mitigated project: C:\SwashProjects\BIXSC45_1AP_10mS_10mL&M
+Saved TOXSWA file: 4630.txw
+Saved TOXSWA file: 4631.txw
+Saved TOXSWA file: 4632.txw
+Saved TOXSWA file: 4633.txw
+Saved TOXSWA file: 4634.txw
+Saved TOXSWA file: 4635.txw
+Saved TOXSWA file: 4636.txw
+Saved TOXSWA file: 4637.txw
+Saved m2t file: macro04631_p_ditch.m2t
+Saved m2t file: macro04631_p_stream.m2t
+Saved m2t file: macro04632_p.m2t
+Saved m2t file: macro04634_p_pond.m2t
+Saved m2t file: macro04634_p_stream.m2t
+Saved m2t file: macro04636_p_pond.m2t
+Saved m2t file: macro04636_p_stream.m2t
+Saved p2t file: 04637-C1.p2t
+Saved updated MACRO/PRZM files. Copying auxiliary files...
+Saving files for crop Cereals, spring
+Copying .inp files..
+Copying c:\swashprojects\BIXSC45_1AP\PRZM\cereals_spring\R4-CS-.INP to C:\SwashProjects\BIXSC45_1AP_10mS_10mL&M\PRZM\cereals_spring\R4-CS-.INP
+Copying .zts files..
+Copying c:\swashprojects\BIXSC45_1AP\PRZM\cereals_spring\R4-CS-.ZTS to C:\SwashProjects\BIXSC45_1AP_10mS_10mL&M\PRZM\cereals_spring\R4-CS-.ZTS
+Save complete
+
+Copied Lanna.met
+Copied La_Jailliere.met
+Copied Roujan.met
+Copied Skousbo.met
+Copied Vredepeel.met
+
+Copied BIXSC45_1AP_B69_14d_report.txt
+
+Generated TOXSWA batch file: C:\SwashProjects\BIXSC45_1AP_10mS_10mL&M\TOXSWA\TOXSWABat.bat
+*
+*-----------------------------------------------------------------
+*
+* Completed in 1.0 seconds
+*
+*-----------------------------------------------------------------

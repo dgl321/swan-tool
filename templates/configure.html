@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Configure SWAN Parameters - SWAN Parameter Generator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-cogs me-2"></i>Configure SWAN Parameters
+                </h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('generate_files') }}" method="post">
+                    <!-- Project Information -->
+                    <div class="mb-4">
+                        <h6><i class="fas fa-info-circle me-2"></i>Project Information</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="num_applications" class="form-label">Number of Applications</label>
+                                <input type="number" class="form-control" id="num_applications" name="num_applications"
+                                    value="1" min="1" max="8" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="output_project_path" class="form-label">Output Project Path</label>
+                                <input type="text" class="form-control" id="output_project_path"
+                                    name="output_project_path" value="C:\SwashProjects\Output" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Substance Properties -->
+                    <div class="mb-4">
+                        <h6><i class="fas fa-flask me-2"></i>Substance Properties</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="vapour_pressure" class="form-label">Vapour Pressure (Pa)</label>
+                                <input type="number" class="form-control" id="vapour_pressure" name="vapour_pressure"
+                                    value="{{ '%.2e'|format(projects[0].vapour_pressure) if projects and projects[0].vapour_pressure else '4.60e-08' }}"
+                                    step="0.000000001" required>
+                                {% if projects and projects[0].vapour_pressure %}
+                                <div class="form-text text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Extracted from TXW files ({{ '%.2e'|format(projects[0].vapour_pressure) }} Pa)
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="mitigation_count" class="form-label">Mitigation Count
+                                    (Auto-calculated)</label>
+                                <input type="number" class="form-control" id="mitigation_count" name="mitigation_count"
+                                    value="{{ projects[0].scenarios|length if projects else 1 }}" min="1" max="20"
+                                    readonly>
+                                <div class="form-text text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Automatically set to match the number of scenarios ({{ projects[0].scenarios|length
+                                    if projects else 1 }})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Run-off Mitigation -->
+                    <div class="mb-4">
+                        <h6><i class="fas fa-water me-2"></i>Run-off Mitigation Parameters</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="runoff_volume_reduction" class="form-label">Volume Reduction</label>
+                                <input type="number" class="form-control" id="runoff_volume_reduction"
+                                    name="runoff_volume_reduction" value="0.0" step="0.1" min="0" max="1">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="runoff_flux_reduction" class="form-label">Flux Reduction</label>
+                                <input type="number" class="form-control" id="runoff_flux_reduction"
+                                    name="runoff_flux_reduction" value="0.0" step="0.1" min="0" max="1">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label for="erosion_mass_reduction" class="form-label">Erosion Mass Reduction</label>
+                                <input type="number" class="form-control" id="erosion_mass_reduction"
+                                    name="erosion_mass_reduction" value="0.0" step="0.1" min="0" max="1">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="erosion_flux_reduction" class="form-label">Erosion Flux Reduction</label>
+                                <input type="number" class="form-control" id="erosion_flux_reduction"
+                                    name="erosion_flux_reduction" value="0.0" step="0.1" min="0" max="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spray Drift Mitigation -->
+                    <div class="mb-4">
+                        <h6><i class="fas fa-wind me-2"></i>Spray Drift Mitigation</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="nozzle_reduction" class="form-label">Nozzle Reduction (%)</label>
+                                <input type="number" class="form-control" id="nozzle_reduction" name="nozzle_reduction"
+                                    value="0" min="0" max="100">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="buffer_width" class="form-label">Buffer Width (m)</label>
+                                <input type="number" class="form-control" id="buffer_width" name="buffer_width"
+                                    value="0" min="0" max="100">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="use_step3_mass_loadings"
+                                        name="use_step3_mass_loadings">
+                                    <label class="form-check-label" for="use_step3_mass_loadings">
+                                        Use Step 3 Mass Loadings
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="select_buffer_width"
+                                        name="select_buffer_width">
+                                    <label class="form-check-label" for="select_buffer_width">
+                                        Select Buffer Width
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic me-2"></i>Generate SWAN Files
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Summary -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Processed Projects ({{ projects|length }})
+                </h6>
+            </div>
+            <div class="card-body">
+                {% for project in projects %}
+                <div class="border-bottom pb-3 mb-3">
+                    <h6 class="text-primary">{{ project.project_name }}</h6>
+                    <div class="small">
+                        <div><strong>Substance:</strong> {{ project.substance_name or 'Unknown' }}</div>
+                        <div><strong>Crop:</strong> {{ project.crop or 'Unknown' }}</div>
+                        <div><strong>Scenarios:</strong> {{ project.scenarios|length }}</div>
+                        <div><strong>Mitigation Count:</strong> {{ project.scenarios|length }}</div>
+                        {% if project.vapour_pressure %}
+                        <div><strong>Vapour Pressure:</strong> {{ '%.2e'|format(project.vapour_pressure) }} Pa</div>
+                        {% endif %}
+                        {% if project.txw_data %}
+                        <div><strong>TXW Files:</strong> {{ project.txw_data.filename or 'N/A' }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Template Information -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-file-code me-2"></i>Template Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="small">
+                    <div><strong>Template:</strong> BIXSC45_1AP_10mS_10m_VFS.tpf</div>
+                    <div><strong>Placeholders:</strong></div>
+                    <ul class="small">
+                        <li><code>&lt;rCrop&gt;</code> - Crop name</li>
+                        <li><code>&lt;rCompund&gt;</code> - Substance name</li>
+                        <li><code>&lt;nApps&gt;</code> - Number of applications</li>
+                        <li><code>&lt;srcProjName&gt;</code> - Source project name</li>
+                        <li><code>&lt;srcProjPath&gt;</code> - Source project path</li>
+                        <li><code>&lt;outputProjPath&gt;</code> - Output project path</li>
+                        <li><code>&lt;SWANtpf&gt;</code> - Parameter filename</li>
+                        <li><code>&lt;fName&gt;</code> - Filename</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add form validation
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (e) {
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Download Generated Files - SWAN Parameter Generator{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-download me-2"></i>Generated Files Ready for Download
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <h6><i class="fas fa-check-circle me-2"></i>Generation Complete!</h6>
+                    <p class="mb-0">Your SWAN parameter files have been generated successfully for {{ project_count }}
+                        project(s).
+                        Each project has been copied to its own output directory alongside the original project folder,
+                        including all original files plus the new SWAN parameter files.
+                    </p>
+                </div>
+
+                {% if project_outputs %}
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6><i class="fas fa-folder me-2"></i>Generated Project Outputs ({{ project_count }})</h6>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <th>Output Directory</th>
+                                        <th>Files Generated</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for project in project_outputs %}
+                                    <tr>
+                                        <td>
+                                            <i class="fas fa-folder-open me-2"></i>
+                                            <strong>{{ project.project_name }}</strong>
+                                        </td>
+                                        <td>
+                                            <code class="small">{{ project.output_dir }}</code>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary me-1">TPF</span>
+                                            <span class="badge bg-success me-1">BAT</span>
+                                            <span class="badge bg-info me-1">Original Files</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-archive me-2"></i>Download Options
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    {% if zip_info %}
+                                    <a href="{{ url_for('download_file', filename=zip_info.name) }}"
+                                        class="btn btn-success">
+                                        <i class="fas fa-download me-2"></i>Download All Projects (ZIP)
+                                    </a>
+                                    <div class="small text-muted mt-2">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Contains all {{ project_count }} projects organized by folder
+                                    </div>
+                                    {% endif %}
+
+                                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Start New Project
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Summary -->
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-info-circle me-2"></i>Summary
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="small">
+                                    <div class="mb-2">
+                                        <i class="fas fa-folder text-primary me-2"></i>
+                                        <strong>{{ project_count }}</strong> projects processed
+                                    </div>
+                                    <div class="mb-2">
+                                        <i class="fas fa-file-code text-success me-2"></i>
+                                        <strong>{{ project_count }}</strong> TPF files generated
+                                    </div>
+                                    <div class="mb-2">
+                                        <i class="fas fa-terminal text-warning me-2"></i>
+                                        <strong>{{ project_count }}</strong> BAT files generated
+                                    </div>
+                                    {% if zip_info %}
+                                    <div class="mb-2">
+                                        <i class="fas fa-archive text-info me-2"></i>
+                                        <strong>1</strong> combined ZIP archive
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Next Steps
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-play-circle text-success me-2"></i>How to Use the Generated Files:
+                                </h6>
+                                <ol class="small">
+                                    <li>Download the ZIP package containing all projects</li>
+                                    <li>Extract the ZIP file to your desired location</li>
+                                    <li>Each project folder contains all original files plus the new <code>.tpf</code>
+                                        and
+                                        <code>TOXSWABAT.bat</code> files
+                                    </li>
+                                    <li>Run the <code>TOXSWABAT.bat</code> file in each project folder to execute TOXSWA
+                                        runs</li>
+                                    <li>Or run individual <code>.tpf</code> files manually</li>
+                                    <li>Check the generated output files in your SWAN project folders</li>
+                                </ol>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-exclamation-triangle text-warning me-2"></i>Important Notes:</h6>
+                                <ul class="small">
+                                    <li>Each project output is a complete copy of the original project plus new SWAN
+                                        files</li>
+                                    <li>Ensure TOXSWA is installed and accessible</li>
+                                    <li>Verify the output paths in the generated files</li>
+                                    <li>Check that all required input files are present</li>
+                                    <li>Monitor the TOXSWA execution for any errors</li>
+                                    <li>Backup your original files before running new simulations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i>No Projects Available</h6>
+                    <p class="mb-0">No generated projects were found. Please go back and regenerate the files.</p>
+                </div>
+                <div class="text-center">
+                    <a href="{{ url_for('configure') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Configuration
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add download tracking
+        const downloadLinks = document.querySelectorAll('a[href*="download"]');
+        downloadLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                const filename = this.getAttribute('href').split('/').pop();
+                console.log('Downloading:', filename);
+            });
+        });
+    });
+</script>
+{% endblock %}
