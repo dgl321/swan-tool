@@ -1,0 +1,17 @@
+[GeneralSettings]
+ProjectName=BIXSC45_1AP_B69_14d
+SubstanceCode=BIXAFEN_SW
+Relationship=1
+CropCode=Cereals, spring
+R1=
+R2=
+R3=
+R4=04637
+[Applications]
+AppMethod=ground spray
+NumberOfApp=1
+0=0.0450   2     4.0
+[R4]
+FirstDayYrApp=185
+LastDayYrApp=215
+MinIntervalApps=1

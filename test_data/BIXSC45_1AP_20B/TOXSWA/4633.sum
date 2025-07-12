@@ -1,0 +1,328 @@
+* ------------------------------------------------------------------------------
+* TOXSWA REPORT: Header
+ 
+* Results from the TOXSWA model  (c) Wageningen University & Research
+* FOCUS  TOXSWA version   : 5.5.3
+* TOXSWA model version    : 3.3.6
+* TOXSWA created on       : 17-Dec-2017
+ 
+* Working directory       : C:\Swashprojects\BIXSC45_1AP_B69_14d\TOXSWA
+* Run ID                  : 4633
+* Input file generated on : 10-07-2025
+* ------------------------------------------------------------------------------
+ 
+* Scenario                : D4_Pond
+* Meteo Station           : Skousbo
+* Substance               : BIXAFEN_SW
+* Flow Type               : Transient
+* Water Body Type         : D4_POND
+* Application Scheme      : FOCUS_EXAMPLE
+* Simulation Period       : 01-Jan-1985 to 30-Apr-1986
+* --------------------------------------------------------------------------------
+* End of TOXSWA REPORT: Header
+* --------------------------------------------------------------------------------
+ 
+* --------------------------------------------------------------------------------
+* TOXSWA REPORT: Substance properties and substance loadings
+ 
+* Summary for the following substances
+ 
+* Substance  1:  BIXAFEN_SW
+* Molar mass (g.mol-1)           :    414.2
+* Saturated vapour pressure (Pa) :  0.460E-07  measured at (C) : 20.0
+* Water solubility (mg.L-1)      :  0.490E+00  measured at (C) : 20.0
+* Half-life in water, lumped (d):    1000.00  at reference temperature (C) : 20.0
+* Half-life in sediment (d)     :    1000.00  at reference temperature (C) : 20.0
+* Kom susp.solids (Freundlich coef. for sorption on organic matter) (L.kg-1) :    2143.85
+* Freundlich exponent (-)                                         :       0.88
+* Kom sediment (Freundlich coef. for sorption on organic matter)    (L.kg-1) :    2143.85
+* Freundlich exponent (-)                                         :       0.88
+* Kmp (coef. for sorption on macrophytes-dry weight)     (L.kg-1) :       0.00
+ 
+ 
+* Summary for the substance loadings
+ 
+* Application pattern and deposition by drift on water surface
+* Appl.No  Date/Hour              Mass (g ai.ha-1)    Areic mean deposition (mg.m-2)
+    1   11-Jul-1985-09h00             45.0000              0.0099
+ 
+ 
+* Lateral entry: drainage       Simulated by: MACRO
+ 
+ 
+* Maximum hourly fluxes from lateral entries
+* Year   Type      Water/Substance      Flux                       Date
+  1985             Water                 0.3536   mm.m-2.hr-1      06-Dec-1985-03h30
+  1985   Drainage       BIXAFEN_SW     0.000061   mg.m-2.hr-1      07-Dec-1985-07h30
+  1985   Drainage       BIXAFEN_SW       0.1734        ug.L-1      07-Dec-1985-07h30
+  1986             Water                 0.1152   mm.m-2.hr-1      23-Jan-1986-00h30
+  1986   Drainage       BIXAFEN_SW  < 1e-6        mg.m-2.hr-1      23-Jan-1986-00h30
+  1986   Drainage       BIXAFEN_SW  < 1e-6             ug.L-1      23-Jan-1986-00h30
+*
+* End of TOXSWA REPORT: Substance properties and substance loadings
+*--------------------------------------------------------------------------------
+ 
+*--------------------------------------------------------------------------------
+* TOXSWA REPORT: Water and mass balances
+ 
+* Table: Water balance of the water body
+* Key to the table
+* --------------------------------------------------------------------------------
+* DelSto                 Change in volume present in water layer (m3)
+* VolPrc                 Volume entered in water body by precipitaton (m3)
+* VolDra                 Volume entered in water body by drainage (m3)
+* VolRun                 Volume entered in water body by runoff (m3)
+* VolUps                 Volume flowed into water body across upstream boundary (m3)
+* VolDwn                 Volume flowed out of water body across downstream boundary (m3)
+* --------------------------------------------------------------------------------
+ 
+
+* Monthly water balance terms (m3) in water system of    30.00 m
+* --------------------------------------------------------------------------------------------
+* Year Month Identifier          DelSto     VolPrc     VolDra     VolRun     VolUps     VolDwn
+* --------------------------------------------------------------------------------------------
+  1985 Jan   BalWatLay           0.3600     0.0000   103.8012     0.0000     0.0000   202.4170
+  1985 Feb   BalWatLay           0.0900     0.0000   115.3722     0.0000     0.0000   204.5844
+  1985 Mar   BalWatLay           0.6300     0.0000   101.0530     0.0000     0.0000   199.2465
+  1985 Apr   BalWatLay          -0.7200     0.0000   101.8625     0.0000     0.0000   198.2642
+  1985 May   BalWatLay          -0.0900     0.0000    61.4668     0.0000     0.0000   160.4730
+  1985 Jun   BalWatLay          -0.1800     0.0000    14.7312     0.0000     0.0000   110.6178
+  1985 Jul   BalWatLay          -0.0900     0.0000     0.3419     0.0000     0.0000    99.2278
+  1985 Aug   BalWatLay           0.4500     0.0000    19.5709     0.0000     0.0000   117.9883
+  1985 Sep   BalWatLay           0.0000     0.0000    45.3989     0.0000     0.0000   141.0827
+  1985 Oct   BalWatLay          -0.0900     0.0000    70.1460     0.0000     0.0000   169.0733
+  1985 Nov   BalWatLay          -0.0900     0.0000    33.8108     0.0000     0.0000   129.6285
+  1985 Dec   BalWatLay           0.9000     0.0000   430.2598     0.0000     0.0000   528.0856
+  1986 Jan   BalWatLay          -0.0900     0.0000   184.4572     0.0000     0.0000   283.4613
+  1986 Feb   BalWatLay          -0.7200     0.0000    75.1163     0.0000     0.0000   165.1822
+  1986 Mar   BalWatLay          -0.1800     0.0000    27.7363     0.0000     0.0000   126.7754
+  1986 Apr   BalWatLay           0.1800     0.0000    33.3911     0.0000     0.0000   128.8950
+* --------------------------------------------------------------------------------------------
+
+* Annual water balance terms (m3) in water system of    30.00 m
+
+* (year may be incomplete)
+* ----------------------------------------------------------------------------------------------------
+* Year   Identifier            DelSto       VolPrc       VolDra       VolRun       VolUps       VolDwn
+* ----------------------------------------------------------------------------------------------------
+  1985   BalWatLay             1.1700       0.0000    1097.8153       0.0000    1163.9850    2260.6890
+  1986   BalWatLay            -0.8100       0.0000     320.7010       0.0000     382.6800     704.3138
+* ----------------------------------------------------------------------------------------------------
+ 
+ 
+* Table: Mass balance of substance in the water layer
+* Key to the table
+* --------------------------------------------------------------------------------
+* DelMas                 Change in mass present in water layer system (g)
+* MasIni                 Mass initially present in water layer (g)
+* MasDrf                 Loading of water body by drift (g)
+* MasAtmDep              Loading of water body by atmopheric deposition (g)
+* MasDra                 Loading of water body by drainage (g)
+* MasRnf                 Loading of water body by run-off (g)
+* MasSedIn               Mass penetrated into sediment (g)
+* MasSedOut              Mass transferred out of sediment (g)
+* MasDwn                 Mass flowed across downstream boundary end (g)
+* MasUps                 Mass flowed across upstream boundary (g)
+* MasTra                 Mass transformed in water layer (g)
+* MasFor                 Mass formed in water layer (g)
+* MasVol                 Mass volatilised from water layer (g)
+* --------------------------------------------------------------------------------
+
+* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Monthly mass balance terms (g) in entire water layer of water body system of      30.00 m for substance:   BIXAFEN_SW
+* Year   Month    DelMas      MasIni      MasDrf   MasAtmDep      MasDra      MasRnf   MasSedIn    MasSedOut      MasDwn      MasUps      MasTra      MasFor      MasVol 
+* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1985   Jan      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                  
+  1985   Feb      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                  
+  1985   Mar      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                  
+  1985   Apr      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                  
+  1985   May      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                  
+  1985   Jun      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                  
+  1985   Jul      0.0054      0.0000      0.0089      0.0000      0.0000      0.0000     -0.0029      0.0000     -0.0005      0.0000     -0.0001      0.0000     -0.0000                                                                                  
+  1985   Aug     -0.0017      0.0054      0.0000      0.0000      0.0000      0.0000     -0.0010      0.0000     -0.0006      0.0000     -0.0001      0.0000     -0.0000                                                                                  
+  1985   Sep     -0.0008      0.0037      0.0000      0.0000      0.0000      0.0000     -0.0003      0.0000     -0.0005      0.0000     -0.0000      0.0000     -0.0000                                                                                  
+  1985   Oct     -0.0006      0.0029      0.0000      0.0000      0.0000      0.0000     -0.0001      0.0000     -0.0005      0.0000     -0.0000      0.0000     -0.0000                                                                                  
+  1985   Nov     -0.0003      0.0023      0.0000      0.0000      0.0000      0.0000     -0.0000      0.0000     -0.0003      0.0000     -0.0000      0.0000     -0.0000                                                                                  
+  1985   Dec      0.0029      0.0020      0.0000      0.0000      0.0086      0.0000     -0.0021      0.0000     -0.0035      0.0000     -0.0000      0.0000     -0.0000                                                                                  
+  1986   Jan     -0.0015      0.0048      0.0000      0.0000      0.0000      0.0000     -0.0002      0.0000     -0.0012      0.0000     -0.0000      0.0000     -0.0000                                                                                  
+  1986   Feb     -0.0005      0.0033      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000     -0.0006      0.0000     -0.0000      0.0000     -0.0000                                                                                  
+  1986   Mar     -0.0004      0.0028      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000     -0.0004      0.0000     -0.0000      0.0000     -0.0000                                                                                  
+  1986   Apr     -0.0003      0.0024      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000     -0.0003      0.0000     -0.0000      0.0000     -0.0000                                                                                  
+
+* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+* ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Annual mass balance terms (g) in water layer of water body system of      30.00 m for substance:   BIXAFEN_SW
+* (years may be incomplete
+* Year      DelMas      MasIni      MasDrf   MasAtmDep      MasDra      MasRnf    MasSedIn   MasSedOut      MasDwn      MasUps      MasTra      MasFor      MasVol 
+* ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1985      0.0048      0.0000      0.0089      0.0000      0.0086      0.0000     -0.0065      0.0000     -0.0059      0.0000     -0.0002      0.0000     -0.0000                                                                                        
+  1986     -0.0027      0.0048      0.0000      0.0000      0.0000      0.0000     -0.0002      0.0001     -0.0025      0.0000     -0.0001      0.0000     -0.0000                                                                                        
+
+* ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+* Table: Mass balance of substance in the sediment
+* Key to the table
+* --------------------------------------------------------------------------------
+* DelMasSed              Change in mass present in sediment system (g)
+* MasIniSed              Mass initially present in sediment (g)
+* MasErs                 Loading of sediment by erosion (g)
+* MasWatIn               Mass transferred to water layer (g)
+* MasWatOut              Mass transferred from water layer (g)
+* MasDwnSed              Mass flowed across boundary to deeper layers (g)
+* MasTraSed              Mass transformed in sediment (g)
+* MasFor                 Mass formed in sediment (g)
+* --------------------------------------------------------------------------------
+
+* ----------------------------------------------------------------------------------------------------------
+* Monthly mass balance terms (g) in sediment of water body system of      30.00 m for substance:   BIXAFEN_SW
+* Year   Month    DelMasSed   MasIniSed   MasErs      MasWatIn    MasWatOut   MasDwnSed   MasTra      MasFor
+* ----------------------------------------------------------------------------------------------------------
+  1985   Jan      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                                                                              
+  1985   Feb      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                                                                              
+  1985   Mar      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                                                                              
+  1985   Apr      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                                                                              
+  1985   May      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                                                                              
+  1985   Jun      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000      0.0000                                                                                                                                              
+  1985   Jul      0.0029      0.0000      0.0000      0.0000      0.0029      0.0000     -0.0000      0.0000                                                                                                                                              
+  1985   Aug      0.0010      0.0029      0.0000      0.0000      0.0010      0.0000     -0.0001      0.0000                                                                                                                                              
+  1985   Sep      0.0003      0.0039      0.0000      0.0000      0.0003      0.0000     -0.0000      0.0000                                                                                                                                              
+  1985   Oct      0.0001      0.0041      0.0000      0.0000      0.0001      0.0000     -0.0000      0.0000                                                                                                                                              
+  1985   Nov      0.0000      0.0042      0.0000      0.0000      0.0000      0.0000     -0.0000      0.0000                                                                                                                                              
+  1985   Dec      0.0021      0.0042      0.0000     -0.0000      0.0021      0.0000     -0.0000      0.0000                                                                                                                                              
+  1986   Jan      0.0002      0.0063      0.0000     -0.0000      0.0002      0.0000     -0.0000      0.0000                                                                                                                                              
+  1986   Feb     -0.0001      0.0065      0.0000     -0.0000      0.0000      0.0000     -0.0000      0.0000                                                                                                                                              
+  1986   Mar     -0.0001      0.0064      0.0000     -0.0000      0.0000      0.0000     -0.0000      0.0000                                                                                                                                              
+  1986   Apr     -0.0001      0.0064      0.0000     -0.0000      0.0000      0.0000     -0.0000      0.0000                                                                                                                                              
+
+* ----------------------------------------------------------------------------------------------------------
+ 
+
+* --------------------------------------------------------------------------------------------------------
+* Annual mass balance terms (g) in sediment of water body system of      30.00 m for substance:   BIXAFEN_SW
+* (years may be incomplete
+* Year      DelMasSed   MasIniSed   MasErs    MasWatIn   MasWatOut      MasDwnSed   MasTraSed   MasForSed
+* --------------------------------------------------------------------------------------------------------
+  1985      0.0063      0.0000      0.0000     -0.0000      0.0065      0.0000     -0.0002      0.0000                                                                                                                                                    
+  1986     -0.0000      0.0000      0.0000     -0.0001      0.0002      0.0000     -0.0001      0.0000                                                                                                                                                    
+* --------------------------------------------------------------------------------------------------------
+*
+* End of TOXSWA REPORT: Water and mass balances
+*--------------------------------------------------------------------------------
+ 
+* --------------------------------------------------------------------------------
+* TOXSWA REPORT: Exposure in water body
+*
+
+
+* Table: Annual maximum exposure concentrations in water layer of substance: BIXAFEN_SW
+* In segment from     0.00 to    30.00 m in water body
+* --------------------------------------------------------------------------------
+* Year                  Concentration        Date                 Daynr
+*                         µg.L-1                         (since start simulation)
+* --------------------------------------------------------------------------------
+  1985                  0.009735       11-Jul-1985-09h00          192
+  1986                  0.005262       01-Jan-1986-00h00          366
+*
+* Tables: Maximum exposure concentrations in water layer
+* In segment from     0.00 to    30.00 m in water body
+* Actual concentrations PECsw as well as PECsed refer to momentary concentrations
+* occurring 1, 2 etc days after the global maximum concentration.
+* The Time Weighted Average Exposure Concentrations (TWAEC) have been calculated
+* for a moving time frame and have been allocated to the last moment of the period considered
+
+* Table: PEC in water layer of substance: BIXAFEN_SW
+* --------------------------------------------------------------------------------
+*                       Concentration        Date                 Daynr
+*                         µg.L-1                         (since start simulation)
+* --------------------------------------------------------------------------------
+Global max                 0.009735    11-Jul-1985-09h00          192
+(incl. suspend.solids      0.009848    11-Jul-1985-09h00          192)
+PECsw_1_day                0.009408    12-Jul-1985-09h00          193
+PECsw_2 days               0.009101    13-Jul-1985-09h00          194
+PECsw_3_days               0.008815    14-Jul-1985-09h00          195
+PECsw_4_days               0.008549    15-Jul-1985-09h00          196
+PECsw_7_days               0.007852    18-Jul-1985-09h00          199
+PECsw_14_days              0.006676    25-Jul-1985-09h00          206
+PECsw_21_days              0.005895    01-Aug-1985-09h00          213
+PECsw_28_days              0.005337    08-Aug-1985-09h00          220
+PECsw_42_days              0.004562    22-Aug-1985-09h00          234
+PECsw_50_days              0.004165    30-Aug-1985-09h00          242
+PECsw_100_days             0.002733    19-Oct-1985-09h00          292
+* --------------------------------------------------------------------------------
+* Legend: - in table means PECsw is later than end of simulated period: 30-Apr-1986
+
+
+* Table: Maximum Time Weighted Averaged Exposure Concentrations substance: BIXAFEN_SW
+* --------------------------------------------------------------------------------
+*                       Concentration        Date                 Daynr
+*                         µg.L-1                         (since start simulation)
+* --------------------------------------------------------------------------------
+TWAECsw_1_day              0.009568    12-Jul-1985-09h00          193
+TWAECsw_2_days             0.009410    13-Jul-1985-09h00          194
+TWAECsw_3_days             0.009259    14-Jul-1985-09h00          195
+TWAECsw_4_days             0.009114    15-Jul-1985-09h00          196
+TWAECsw_7_days             0.008717    18-Jul-1985-09h00          199
+TWAECsw_14_days            0.007995    21-Dec-1985-06h00          355
+TWAECsw_21_days            0.007399    01-Aug-1985-09h00          213
+TWAECsw_28_days            0.006950    08-Aug-1985-09h00          220
+TWAECsw_42_days            0.006274    22-Aug-1985-09h00          234
+TWAECsw_50_days            0.005968    30-Aug-1985-09h00          242
+TWAECsw_100_days           0.004670    19-Oct-1985-09h00          292
+* --------------------------------------------------------------------------------
+
+
+
+* Tables: Maximum exposure content in sediment
+--------------------------------------------------------------------------------
+* In the top     5.00 cm sediment located under
+* the water body segment from     0.00 to    30.00 m,
+* the content is expressed as µg substance per kg dry sediment.
+
+* Table: PEC in sediment of substance: BIXAFEN_SW
+* --------------------------------------------------------------------------------
+*                         Content             Date                Daynr
+*                         µg.kg-1                         (since start simulation)
+* --------------------------------------------------------------------------------
+Global max                    0.1805    24-Jan-1986-06h00          389
+PECsed_1_day                  0.1805    25-Jan-1986-06h00          390
+PECsed_2_days                 0.1805    26-Jan-1986-06h00          391
+PECsed_3_days                 0.1804    27-Jan-1986-06h00          392
+PECsed_4_days                 0.1803    28-Jan-1986-06h00          393
+PECsed_7_days                 0.1801    31-Jan-1986-06h00          396
+PECsed_14_days                0.1795    07-Feb-1986-06h00          403
+PECsed_21_days                0.1789    14-Feb-1986-06h00          410
+PECsed_28_days                0.1784    21-Feb-1986-06h00          417
+PECsed_42_days                0.1776    07-Mar-1986-06h00          431
+PECsed_50_days                0.1772    15-Mar-1986-06h00          439
+PECsed_100_days             -                  -                     -
+* --------------------------------------------------------------------------------
+* Legend: - in table means PECsed is later than end of simulated period: 30-Apr-1986
+
+
+* Table: Maximum Time Weighted Averaged Exposure Content substance: BIXAFEN_SW
+* --------------------------------------------------------------------------------
+*                         Content             Date                Daynr
+*                          µg.kg-1                       (since start simulation)
+* --------------------------------------------------------------------------------
+TWAECsed_1_day                0.1805    24-Jan-1986-18h00          389
+TWAECsed_2_days               0.1805    25-Jan-1986-06h00          390
+TWAECsed_3_days               0.1805    25-Jan-1986-19h00          390
+TWAECsed_4_days               0.1805    26-Jan-1986-08h00          391
+TWAECsed_7_days               0.1805    28-Jan-1986-02h00          393
+TWAECsed_14_days              0.1803    01-Feb-1986-10h00          397
+TWAECsed_21_days              0.1801    06-Feb-1986-01h00          402
+TWAECsed_28_days              0.1800    11-Feb-1986-00h00          407
+TWAECsed_42_days              0.1796    21-Feb-1986-20h00          417
+TWAECsed_50_days              0.1793    28-Feb-1986-08h00          424
+TWAECsed_100_days             0.1781    12-Apr-1986-17h00          467
+* --------------------------------------------------------------------------------
+
+ 
+* 
+* End of TOXSWA REPORT: Exposure in water body
+* --------------------------------------------------------------------------------
+
+
+
+*  The run time was   0 minutes and 20 seconds

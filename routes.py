@@ -332,6 +332,7 @@ def generate_multiple_combinations(projects, form_data):
                 tpf_path = os.path.join(project_output_dir, tpf_filename)
                 
                 generated_tpf = tpf_generator.generate_tpf(parameters, tpf_path)
+                project['tpf_file_path'] = generated_tpf
                 generated_files.append(generated_tpf)
                 
                 # Generate .bat file for this project
@@ -458,6 +459,11 @@ def generate_parameter_string_from_combination(combination):
     elif runoff_scenario == '20m':
         parameters.append("20L&M")
     
+    # VFSMOD buffer width
+    vfsmod_width = combination.get('vfsmod', 0)
+    if vfsmod_width > 0:
+        parameters.append(f"{vfsmod_width}VFS")
+    
     # Join parameters with underscores
     if parameters:
         return "_" + "_".join(parameters)
@@ -479,8 +485,11 @@ def prepare_tpf_parameters_for_combination(project, form_data, combination):
         vapour_pressure = float(form_data.get('vapour_pressure', 0.000000046))
         print(f"Using form vapour pressure: {vapour_pressure}")
     
-    # Handle mitigation scenario selection from combination
+    # Handle runoff mitigation (standard and VFSMOD are separate parameters)
     runoff_scenario = combination.get('runoff', '')
+    vfsmod_width = combination.get('vfsmod', 0)
+    
+    # Standard runoff mitigation
     if runoff_scenario == '10m':
         # 10m VFS Buffer: Volume 0.6, Erosion 0.85
         runoff_volume_reduction = 0.6
@@ -494,11 +503,14 @@ def prepare_tpf_parameters_for_combination(project, form_data, combination):
         erosion_mass_reduction = 0.95
         erosion_flux_reduction = 0.95
     else:
-        # No runoff mitigation
+        # No standard runoff mitigation
         runoff_volume_reduction = 0.0
         runoff_flux_reduction = 0.0
         erosion_mass_reduction = 0.0
         erosion_flux_reduction = 0.0
+    
+    # VFSMOD is a separate parameter that creates its own projects
+    use_vfsmod = vfsmod_width > 0
     
     # Generate parameter string for filename
     param_string = generate_parameter_string_from_combination(combination)
@@ -522,6 +534,8 @@ def prepare_tpf_parameters_for_combination(project, form_data, combination):
         'use_step3_mass_loadings': form_data.get('use_step3_mass_loadings') == 'on',
         'select_buffer_width': form_data.get('select_buffer_width') == 'on',
         'buffer_width': combination.get('buffer', 0),
+        'use_vfsmod': use_vfsmod,
+        'vfsmod_width': vfsmod_width,
         'scenarios': scenarios
     }
     

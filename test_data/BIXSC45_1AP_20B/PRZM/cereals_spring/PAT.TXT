@@ -1,0 +1,21 @@
+PAT input values
+  Scenario                                                   R1          R2          R3          R4
+  Crop emergence day                                          0           0           0          74
+  First possible appln date (days after emergence)            0           0           0         111
+  First possible appln date (julian day)                      0           0           0         185
+  Maximum application window (days)                           1           1           1          31
+  Minimum interval between applications (days)                0           0           0           1
+  Number of applications                                      1           1           1           1
+ 
+ 
+Final rules used by PAT to select dates
+  Rule 1: Prec<A mm +/- B DAT
+    A value from PAT (mm)                                  2.00        2.00        2.00        2.00
+    B value from PAT (days)                                   2           2           2           2
+ 
+  Rule 2: Prec<C mm +/- D DAT
+    C value from PAT (mm)                                 10.00       10.00       10.00       10.00
+    D value from PAT (days)                                  10          10          10          10
+ 
+ 
+Application dates selected by PAT                                                       25-Jul-1985

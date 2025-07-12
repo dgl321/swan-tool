@@ -1,0 +1,28 @@
+PRZM                    ON
+VADOFT                  OFF
+MONTE CARLO             OFF
+TRANSPORT               ON
+*** zone records
+PRZM ZONES              1   6 123
+ENDRUN
+*** input file records
+  PATH                  C:\SWASH\PRZM\met\
+  METEOROLOGY       1   R4noirr.met 
+  PATH                                                                                                  
+  PRZM INPUT        1   R4-CS-.INP  
+*** output file records
+  PATH                                                                                                  
+  TIME SERIES       1   R4-CS-.ZTS  
+  PRZM OUTPUT       1   R4-CS-.OUT  
+*** scratch file records
+  PATH                                                                                                  
+  PRZM RESTART          RESTART.PRZ
+ENDFILES
+*** global records
+  START DATE            010175
+  END DATE              311294
+NUMBER OF CHEMICALS     1
+ENDDATA
+*** display records
+ECHO                    6
+TRACE                   OFF

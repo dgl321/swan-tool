@@ -56,6 +56,9 @@ class TPFGenerator:
         # Create the content by replacing placeholders
         content = self.template_content
         
+        # Check if this is a VFSMOD template
+        use_vfsmod = parameters.get('use_vfsmod', False)
+        
         # Replace standard placeholders
         replacements = {
             '<rCrop>': parameters.get('crop', 'Unknown'),
@@ -85,6 +88,25 @@ class TPFGenerator:
         # Handle mitigation matrix
         mit_matrix = self._generate_mitigation_matrix(parameters)
         content = content.replace('<MitMatrix>', mit_matrix)
+        
+        # Handle VFSMOD vs standard runoff section
+        if use_vfsmod:
+            # Replace the entire runoff section with VFSMOD format
+            vfsmod_width = parameters.get('vfsmod_width', 0)
+            vfsmod_section = f"""*-----------------------------------------------------------------
+* Run-off mitigation parameters
+*-----------------------------------------------------------------
+*
+Reduction run-off mode:                 VfsMod
+Filter strip buffer width:             {vfsmod_width}
+*
+*-----------------------------------------------------------------"""
+            
+            # Find and replace the runoff section
+            content = self._replace_runoff_section(content, vfsmod_section)
+        else:
+            # Use standard runoff format (already handled by placeholders)
+            pass
         
         # Write the generated content to file
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -116,6 +138,26 @@ class TPFGenerator:
             matrix_lines.append(line)
             
         return '\n'.join(matrix_lines)
+    
+    def _replace_runoff_section(self, content: str, new_section: str) -> str:
+        """Replace the runoff mitigation section in the template."""
+        # Pattern to match the runoff section
+        pattern = r'\*-----------------------------------------------------------------\s*\*\s*Run-off mitigation parameters\s*\*-----------------------------------------------------------------\s*\*.*?\*-----------------------------------------------------------------'
+        
+        # Use re.DOTALL to match across multiple lines
+        if re.search(pattern, content, re.DOTALL):
+            return re.sub(pattern, new_section, content, flags=re.DOTALL)
+        else:
+            # If pattern not found, try a more flexible approach
+            # Look for the section between the runoff header and the next section
+            pattern2 = r'(\*-----------------------------------------------------------------\s*\*\s*Run-off mitigation parameters\s*\*-----------------------------------------------------------------\s*\*.*?)(\*-----------------------------------------------------------------\s*\*\s*Spray drift mitigation parameters)'
+            
+            if re.search(pattern2, content, re.DOTALL):
+                return re.sub(pattern2, new_section + r'\2', content, flags=re.DOTALL)
+            else:
+                # If still not found, just return original content
+                print("Warning: Could not find runoff section to replace")
+                return content
     
     def generate_multiple_tpf_files(self, project_data: List[Dict], output_dir: str) -> List[str]:
         """

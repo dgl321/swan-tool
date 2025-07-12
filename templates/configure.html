@@ -222,23 +222,106 @@
                         <!-- Runoff Mitigation Selection -->
                         <div class="mb-4">
                             <label class="form-label fw-bold">Runoff Mitigation Scenarios</label>
-                            <div class="row g-2">
-                                <div class="col-md-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input runoff-checkbox" type="checkbox" id="runoff_10m"
-                                            value="10m">
-                                        <label class="form-check-label" for="runoff_10m">
-                                            10m VFS Buffer (Volume: 0.6, Erosion: 0.85)
-                                        </label>
+
+                            <!-- Standard Runoff Buffers -->
+                            <div class="mb-3">
+                                <h6 class="text-secondary mb-2">Standard Runoff Buffers (Fractional Reduction)</h6>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input runoff-checkbox" type="checkbox"
+                                                id="runoff_10m" value="10m">
+                                            <label class="form-check-label" for="runoff_10m">
+                                                10m VFS Buffer (Volume: 0.6, Erosion: 0.85)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input runoff-checkbox" type="checkbox"
+                                                id="runoff_20m" value="20m">
+                                            <label class="form-check-label" for="runoff_20m">
+                                                20m VFS Buffer (Volume: 0.8, Erosion: 0.95)
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input runoff-checkbox" type="checkbox" id="runoff_20m"
-                                            value="20m">
-                                        <label class="form-check-label" for="runoff_20m">
-                                            20m VFS Buffer (Volume: 0.8, Erosion: 0.95)
-                                        </label>
+                            </div>
+
+                            <!-- VFSMOD Runoff Buffers -->
+                            <div class="mb-3">
+                                <h6 class="text-secondary mb-2">VFSMOD Runoff Buffers (Filter Strip Width)</h6>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="vfsmod_custom_checkbox">
+                                            <label class="form-check-label" for="vfsmod_custom_checkbox">Custom
+                                                Values</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- VFSMOD Custom Values Section -->
+                                <div class="row g-2" id="vfsmod_custom_section" style="display: none;">
+                                    <div class="col-md-8">
+                                        <label for="vfsmod_custom" class="form-label">VFSMOD Buffer Widths
+                                            (comma-separated)</label>
+                                        <input type="text" class="form-control" id="vfsmod_custom"
+                                            placeholder="e.g., 10, 20, 30, 40, 50"
+                                            title="Enter VFSMOD buffer width values separated by commas (0-100m)">
+                                        <div class="form-text">Add custom VFSMOD buffer width values (0-100m)</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm mt-4"
+                                            onclick="addCustomVFSMOD()">
+                                            <i class="fas fa-plus me-1"></i>Add Values
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- VFSMOD Preset Values -->
+                                <div class="row g-2 mt-2" id="vfsmod_presets">
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input vfsmod-checkbox" type="checkbox"
+                                                id="vfsmod_10" value="10">
+                                            <label class="form-check-label" for="vfsmod_10">10m</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input vfsmod-checkbox" type="checkbox"
+                                                id="vfsmod_20" value="20">
+                                            <label class="form-check-label" for="vfsmod_20">20m</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input vfsmod-checkbox" type="checkbox"
+                                                id="vfsmod_30" value="30">
+                                            <label class="form-check-label" for="vfsmod_30">30m</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input vfsmod-checkbox" type="checkbox"
+                                                id="vfsmod_40" value="40">
+                                            <label class="form-check-label" for="vfsmod_40">40m</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input vfsmod-checkbox" type="checkbox"
+                                                id="vfsmod_50" value="50">
+                                            <label class="form-check-label" for="vfsmod_50">50m</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input vfsmod-checkbox" type="checkbox"
+                                                id="vfsmod_75" value="75">
+                                            <label class="form-check-label" for="vfsmod_75">75m</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -358,10 +441,22 @@
                 <div class="small">
                     <div class="mb-2"><strong>Template:</strong> BIXSC45_1AP_10mS_10m_VFS.tpf</div>
                     <div class="mb-2"><strong>Run-off Mode:</strong> ManualReduction (FOCUS-compliant)</div>
-                    <div class="mb-2"><strong>FOCUS Scenarios:</strong></div>
+                    <div class="mb-2"><strong>Runoff Mitigation Options:</strong></div>
                     <ul class="small mb-3">
-                        <li><strong>10m VFS Buffer:</strong> Volume 0.6, Erosion 0.85</li>
-                        <li><strong>20m VFS Buffer:</strong> Volume 0.8, Erosion 0.95</li>
+                        <li><strong>Standard (Fractional Reduction):</strong></li>
+                        <ul class="small mb-2">
+                            <li>10m VFS Buffer: Volume 0.6, Erosion 0.85</li>
+                            <li>20m VFS Buffer: Volume 0.8, Erosion 0.95</li>
+                            <li>Creates projects with <code>_10L&M</code> or <code>_20L&M</code></li>
+                        </ul>
+                        <li><strong>VFSMOD (Filter Strip Width):</strong></li>
+                        <ul class="small mb-2">
+                            <li>Select buffer widths: 10m, 20m, 30m, 40m, 50m, 75m</li>
+                            <li>Custom values: 0-100m</li>
+                            <li>Creates projects with <code>_10VFS</code>, <code>_20VFS</code>, etc.</li>
+                            <li>Uses VFSMOD template format</li>
+                        </ul>
+                        <li><strong>Note:</strong> Standard and VFSMOD create separate projects</li>
                     </ul>
                     <div class="mb-2"><strong>Key Placeholders:</strong></div>
                     <ul class="small mb-0">
@@ -388,12 +483,18 @@
         // Get all checkbox groups
         const runoffCheckboxes = document.querySelectorAll('.runoff-checkbox');
         const bufferCheckboxes = document.querySelectorAll('.buffer-checkbox');
+        const vfsmodCheckboxes = document.querySelectorAll('.vfsmod-checkbox');
 
         // Custom input fields
         const nozzleCustomInput = document.getElementById('nozzle_custom');
         const bufferCustomInput = document.getElementById('buffer_custom');
         const bufferCustomCheckbox = document.getElementById('buffer_custom_checkbox');
         const bufferCustomSection = document.getElementById('buffer_custom_section');
+
+        // VFSMOD elements
+        const vfsmodCustomInput = document.getElementById('vfsmod_custom');
+        const vfsmodCustomCheckbox = document.getElementById('vfsmod_custom_checkbox');
+        const vfsmodCustomSection = document.getElementById('vfsmod_custom_section');
 
         // Hidden form fields for legacy compatibility
         const nozzleReductionField = document.getElementById('nozzle_reduction');
@@ -437,8 +538,19 @@
             // Combine checkbox and custom buffer values
             const allBuffers = [...new Set([...selectedBuffers, ...customBuffers])];
 
+            // Get VFSMOD values
+            const selectedVFSMOD = Array.from(vfsmodCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => parseInt(cb.value));
+
+            // Get custom VFSMOD values only if custom checkbox is checked
+            const customVFSMOD = vfsmodCustomCheckbox.checked ? parseCustomValues(vfsmodCustomInput.value) : [];
+
+            // Combine VFSMOD checkbox and custom values
+            const allVFSMOD = [...new Set([...selectedVFSMOD, ...customVFSMOD])];
+
             // If no parameters selected, show default message
-            if (nozzleValues.length === 0 && selectedRunoffs.length === 0 && allBuffers.length === 0) {
+            if (nozzleValues.length === 0 && selectedRunoffs.length === 0 && allBuffers.length === 0 && allVFSMOD.length === 0) {
                 combinationsPreview.innerHTML = '<p class="text-muted mb-0">Select parameters above to see the combinations that will be generated...</p>';
                 combinationCount.textContent = '0';
                 return [];
@@ -447,16 +559,17 @@
             // Generate all combinations
             const combinations = [];
             const nozzleVals = nozzleValues.length > 0 ? nozzleValues : [0];
-            const runoffValues = selectedRunoffs.length > 0 ? selectedRunoffs : [''];
             const bufferValues = allBuffers.length > 0 ? allBuffers : [0];
 
+            // Generate combinations for standard runoff (separate from VFSMOD)
             for (const nozzle of nozzleVals) {
-                for (const runoff of runoffValues) {
+                for (const runoff of selectedRunoffs) {
                     for (const buffer of bufferValues) {
                         const combination = {
                             nozzle: nozzle,
                             runoff: runoff,
                             buffer: buffer,
+                            vfsmod: 0,  // No VFSMOD for standard runoff projects
                             params: []
                         };
 
@@ -465,6 +578,28 @@
                         if (buffer > 0) combination.params.push(`${buffer}B`);
                         if (runoff === '10m') combination.params.push('10L&M');
                         if (runoff === '20m') combination.params.push('20L&M');
+
+                        combinations.push(combination);
+                    }
+                }
+            }
+
+            // Generate combinations for VFSMOD (separate from standard runoff)
+            for (const nozzle of nozzleVals) {
+                for (const vfsmod of allVFSMOD) {
+                    for (const buffer of bufferValues) {
+                        const combination = {
+                            nozzle: nozzle,
+                            runoff: '',  // No standard runoff for VFSMOD projects
+                            buffer: buffer,
+                            vfsmod: vfsmod,
+                            params: []
+                        };
+
+                        // Build parameter string
+                        if (nozzle > 0) combination.params.push(`${nozzle}N`);
+                        if (buffer > 0) combination.params.push(`${buffer}B`);
+                        if (vfsmod > 0) combination.params.push(`${vfsmod}VFS`);
 
                         combinations.push(combination);
                     }
@@ -498,7 +633,9 @@
                         </div>
                         <div class="small text-muted mt-1">
                             Nozzle: ${combo.nozzle}% | 
-                            ${combo.runoff ? `Runoff: ${combo.runoff}` : 'No runoff'} | 
+                            ${combo.runoff ? `Standard Runoff: ${combo.runoff}` : ''}
+                            ${combo.vfsmod > 0 ? `VFSMOD: ${combo.vfsmod}m` : ''}
+                            ${!combo.runoff && combo.vfsmod === 0 ? 'No runoff' : ''} | 
                             Buffer: ${combo.buffer}m
                         </div>
                     </div>
@@ -530,9 +667,20 @@
             }
         }
 
+        // Function to add custom VFSMOD values
+        function addCustomVFSMOD() {
+            const customValues = parseCustomValues(vfsmodCustomInput.value);
+            if (customValues.length > 0) {
+                generateCombinations();
+                vfsmodCustomInput.value = ''; // Clear input after adding
+            } else {
+                alert('Please enter valid VFSMOD buffer width values (0-100, comma-separated)');
+            }
+        }
+
         // Add event listeners to all checkboxes and inputs
         function addEventListeners() {
-            const allCheckboxes = [...runoffCheckboxes, ...bufferCheckboxes];
+            const allCheckboxes = [...runoffCheckboxes, ...bufferCheckboxes, ...vfsmodCheckboxes];
 
             allCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
@@ -549,9 +697,19 @@
                 generateCombinations();
             });
 
+            vfsmodCustomInput.addEventListener('input', function () {
+                generateCombinations();
+            });
+
             // Add listener for custom buffer checkbox to show/hide section
             bufferCustomCheckbox.addEventListener('change', function () {
                 bufferCustomSection.style.display = this.checked ? 'block' : 'none';
+                generateCombinations();
+            });
+
+            // Add listener for custom VFSMOD checkbox to show/hide section
+            vfsmodCustomCheckbox.addEventListener('change', function () {
+                vfsmodCustomSection.style.display = this.checked ? 'block' : 'none';
                 generateCombinations();
             });
 
@@ -565,6 +723,12 @@
             bufferCustomInput.addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
                     addCustomBuffers();
+                }
+            });
+
+            vfsmodCustomInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    addCustomVFSMOD();
                 }
             });
 
@@ -582,7 +746,14 @@
                 bufferCustomInput.value = '';
                 // Uncheck all runoff checkboxes
                 runoffCheckboxes.forEach(cb => { cb.checked = false; });
-                // Update combinations preview (should show default: nozzle 0, buffer 0, no runoff)
+                // Uncheck all VFSMOD checkboxes
+                vfsmodCheckboxes.forEach(cb => { cb.checked = false; });
+                // Uncheck custom VFSMOD checkbox and hide custom section
+                vfsmodCustomCheckbox.checked = false;
+                vfsmodCustomSection.style.display = 'none';
+                // Clear custom VFSMOD input
+                vfsmodCustomInput.value = '';
+                // Update combinations preview (should show default: nozzle 0, buffer 0, no runoff, no VFSMOD)
                 generateCombinations();
             });
         }
@@ -609,10 +780,16 @@
                 bufferInput.name = `combinations[${index}][buffer]`;
                 bufferInput.value = combo.buffer;
 
+                const vfsmodInput = document.createElement('input');
+                vfsmodInput.type = 'hidden';
+                vfsmodInput.name = `combinations[${index}][vfsmod]`;
+                vfsmodInput.value = combo.vfsmod;
+
                 // Add to form
                 document.getElementById('parameterForm').appendChild(nozzleInput);
                 document.getElementById('parameterForm').appendChild(runoffInput);
                 document.getElementById('parameterForm').appendChild(bufferInput);
+                document.getElementById('parameterForm').appendChild(vfsmodInput);
             });
 
             // Add total combinations count

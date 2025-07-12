@@ -1,0 +1,12 @@
+# CROP PROTECTANTS-  1 1985 1.00 1.00 6 4 0
+# of Applications  1
+ 1              25-Jul-1985-09:00           45.0000
+# YEARS             20
+SCENARIO            R4
+CROP                Cereals, Spring  
+METEOROLOGICAL      R4noirr.met
+CROP PROTECTANT 1   BIXAFEN_SW            Applied Amount (g/ha) =    45.00 -Annually   
+CR4-CS-1.CNC
+CR4-CS-1.MSB
+CR4-CS-1.HYD
+CR4-CS-1.ANN
