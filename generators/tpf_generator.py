@@ -97,9 +97,10 @@ class TPFGenerator:
 * Run-off mitigation parameters
 *-----------------------------------------------------------------
 *
-Reduction run-off mode:                 VfsMod
+Reduction run-off mode:                VfsMod
 Filter strip buffer width:             {vfsmod_width}
-*
+*-----------------------------------------------------------------
+* Spray drift mitigation parameters
 *-----------------------------------------------------------------"""
             
             # Find and replace the runoff section
